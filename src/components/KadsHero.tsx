@@ -7,43 +7,24 @@ const STEPS = [
   { l: 'S', rest: 'ystems', desc: 'Ship systems that keep running.' },
 ];
 
-// KADS letters light up in turn (pale → orange → ink) while its word
-// slides in underneath. Pauses on hover and respects reduced motion.
+// KADS letters light up in turn (pale → orange → ink) and loop on their own.
+// With reduced motion on, the cycle keeps running but only colors change:
+// no sliding or lifting.
 export default function KadsHero() {
   const [i, setI] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const [still, setStill] = useState(false);
 
   useEffect(() => {
-    const mq = matchMedia('(prefers-reduced-motion: reduce)');
-    setStill(mq.matches);
-    const on = () => setStill(mq.matches);
-    mq.addEventListener('change', on);
-    return () => mq.removeEventListener('change', on);
+    const t = setInterval(() => setI((n) => (n + 1) % STEPS.length), 1900);
+    return () => clearInterval(t);
   }, []);
-
-  useEffect(() => {
-    if (paused || still) return;
-    const t = setTimeout(() => setI((n) => (n + 1) % STEPS.length), 1900);
-    return () => clearTimeout(t);
-  }, [i, paused, still]);
 
   const cur = STEPS[i]!;
   return (
-    <div onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+    <div>
       <p className="sr-only">KADS: Knowledge, Architecture, Development, Systems.</p>
       <div className="kads-letters" aria-hidden="true">
         {STEPS.map((s, n) => (
-          <button
-            key={s.l}
-            type="button"
-            tabIndex={-1}
-            onClick={() => setI(n)}
-            className={`kl${n === i ? ' on' : n < i ? ' done' : ''}`}
-            style={{ background: 'none', border: 0, padding: 0, font: 'inherit', cursor: 'pointer', lineHeight: 'inherit' }}
-          >
-            {s.l}
-          </button>
+          <span key={s.l} className={`kl${n === i ? ' on' : n < i ? ' done' : ''}`}>{s.l}</span>
         ))}
       </div>
       <div className="kads-bar" aria-hidden="true"><span style={{ width: `${((i + 1) / STEPS.length) * 100}%` }} /></div>

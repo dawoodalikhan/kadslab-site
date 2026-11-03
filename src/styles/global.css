@@ -121,6 +121,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; }
+  .kl { transition: color .45s !important; }
+  .kl.on { transform: none; }
+  .kads-bar span { transition: width .45s !important; }
   .mac-scroll { animation: none; }
   .kw-in { animation: none; }
 }
