@@ -126,13 +126,13 @@ function BookingDemo() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
       <ol style={{ margin: 0, padding: 0, listStyle: 'none', display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: 8, fontSize: 13 }}>
-        {steps.map((s, i) => <li key={s} aria-current={i === step ? 'step' : undefined} style={{ borderTop: `3px solid ${i <= step ? 'var(--blue)' : 'var(--line-2)'}`, paddingTop: 8, fontWeight: i <= step ? 600 : 400, color: i <= step ? 'var(--ink)' : 'var(--muted)' }}>{i + 1} · {s}</li>)}
+        {steps.map((s, i) => <li key={s} aria-current={i === step ? 'step' : undefined} style={{ borderTop: `3px solid ${i <= step ? 'var(--accent)' : 'var(--line-2)'}`, paddingTop: 8, fontWeight: i <= step ? 600 : 400, color: i <= step ? 'var(--ink)' : 'var(--muted)' }}>{i + 1} · {s}</li>)}
       </ol>
       {step === 0 && <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>{SPACES.map((s) => <button key={s.id} type="button" className="pill" aria-pressed={space === s.id} onClick={() => { setSpace(s.id); setSlot(null); setAddons([]); }}>{s.name}</button>)}</div>}
       {step === 1 && (
         <div role="group" aria-label="Available times" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 8 }}>
           {SLOTS.map((t, i) => { const off = TAKEN[space]!.includes(i); const on = slot === i;
-            return <button key={t} type="button" disabled={off} aria-pressed={on} onClick={() => setSlot(i)} style={{ borderRadius: 12, padding: '14px 0', border: `1px solid ${on ? 'var(--blue)' : 'var(--line-2)'}`, background: off ? '#EFEDE8' : on ? 'var(--blue)' : '#fff', color: off ? '#8A8A90' : on ? '#fff' : 'var(--ink)', textDecoration: off ? 'line-through' : 'none', cursor: off ? 'not-allowed' : 'pointer' }}>{t}</button>; })}
+            return <button key={t} type="button" disabled={off} aria-pressed={on} onClick={() => setSlot(i)} style={{ borderRadius: 12, padding: '14px 0', border: `1px solid ${on ? 'var(--accent)' : 'var(--line-2)'}`, background: off ? '#EFEDE8' : on ? 'var(--accent)' : '#fff', color: off ? '#8A8A90' : 'var(--ink)', fontWeight: on ? 700 : 400, textDecoration: off ? 'line-through' : 'none', cursor: off ? 'not-allowed' : 'pointer' }}>{t}</button>; })}
         </div>
       )}
       {step === 2 && (
@@ -189,7 +189,7 @@ function InspectorDemo() {
       <form onSubmit={(e) => { e.preventDefault(); run(); }} style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
         <label className="sr-only" htmlFor="i-url">Page URL</label>
         <input id="i-url" value={url} onChange={(e) => setUrl(e.target.value)} style={{ flex: '1 1 260px', border: '1px solid var(--line-2)', borderRadius: 12, padding: '12px 14px', fontFamily: 'var(--mono)' }} />
-        <button className="btn btn-blue" style={{ padding: '12px 18px', borderRadius: 12 }} disabled={state === 'loading'}>{state === 'loading' ? 'Inspecting…' : 'Inspect'}</button>
+        <button className="btn btn-accent" style={{ padding: '12px 18px', borderRadius: 12 }} disabled={state === 'loading'}>{state === 'loading' ? 'Inspecting…' : 'Inspect'}</button>
       </form>
       <div aria-live="polite">
         {state === 'idle' && <p style={{ margin: 0, padding: 24, border: '1px dashed var(--line-2)', borderRadius: 14, textAlign: 'center', color: 'var(--muted)' }}>Enter a public URL and press Inspect.</p>}
@@ -233,7 +233,7 @@ function DashboardDemo() {
       </div>
       <figure style={{ margin: 0 }}>
         <div role="img" aria-label={`Leads per week, week 1 to 12: ${weekly.join(', ')}`} style={{ height: 180, display: 'flex', alignItems: 'flex-end', gap: 8, borderBottom: '1px solid var(--ink)' }}>
-          {weekly.map((v, i) => <span key={i} title={`Week ${i + 1}: ${v} leads`} style={{ flex: '1 1 0', height: `${(v / max) * 100}%`, background: i === WEEKS - 1 ? 'var(--blue)' : '#C9C5BD', borderRadius: '4px 4px 0 0' }} />)}
+          {weekly.map((v, i) => <span key={i} title={`Week ${i + 1}: ${v} leads`} style={{ flex: '1 1 0', height: `${(v / max) * 100}%`, background: i === WEEKS - 1 ? 'var(--accent)' : '#C9C5BD', borderRadius: '4px 4px 0 0' }} />)}
         </div>
         <figcaption style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, fontSize: 12, color: 'var(--muted)' }}><span>Week 1</span><span>Leads per week · synthetic data</span><span>Week 12</span></figcaption>
       </figure>
@@ -241,5 +241,5 @@ function DashboardDemo() {
   );
 }
 function Kpi({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
-  return <div style={{ borderTop: `2px solid ${accent ? 'var(--blue)' : 'var(--ink)'}`, paddingTop: 10 }}><div style={{ fontSize: 13, color: 'var(--muted)' }}>{label}</div><div style={{ fontSize: 32, fontWeight: 700, color: accent ? 'var(--blue)' : 'var(--ink)' }}>{value}</div></div>;
+  return <div style={{ borderTop: `2px solid ${accent ? 'var(--accent)' : 'var(--ink)'}`, paddingTop: 10 }}><div style={{ fontSize: 13, color: 'var(--muted)' }}>{label}</div><div style={{ fontSize: 32, fontWeight: 700, color: accent ? 'var(--accent)' : 'var(--ink)' }}>{value}</div></div>;
 }

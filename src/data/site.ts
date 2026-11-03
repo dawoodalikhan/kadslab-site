@@ -49,7 +49,7 @@ export const TILES: Tile[] = [
       brand: '■■■■■■ RESIDENTIAL', hero: 'Homes near the train, run by people who answer.', cta: 'View communities',
       chips: ['All', 'Owned', 'Managed', 'Town ▾'],
       rows: Array.from({ length: 12 }, (_, i) => ({ a: `Property ${String(i + 1).padStart(2, '0')}`, b: `${[48, 64, 36, 72, 40, 56, 44, 52, 60, 38, 46, 58][i]} units` })),
-      colors: { bg: '#EDEFF1', fg: '#1E2933', head: '#23303B', headFg: '#FFFFFF', cta: '#FFFFFF', ctaFg: '#23303B', card: '#FFFFFF', img: '#C3CDD6', line: '#B6C0C9' },
+      colors: { bg: '#ECEAE5', fg: '#15161A', head: '#15161A', headFg: '#F7F5F0', cta: '#F7F5F0', ctaFg: '#15161A', card: '#FFFFFF', img: '#D3CFC7', line: '#C9C5BD' },
     },
   },
   {
@@ -61,7 +61,7 @@ export const TILES: Tile[] = [
       brand: 'APEX & IRON', hero: 'Classic cars, restored to the standard they left the factory with.', cta: 'Start a build',
       chips: ['Restoration', 'Engines', 'Gallery', 'Shop'],
       rows: [['Light restoration', 'Package'], ['Modified build', 'Package'], ['Signature build', 'Package'], ['Engine rebuild', 'Service'], ['Performance engine', 'Service'], ['Collection care', 'Service'], ['1973 coupe', 'Gallery'], ['1989 targa', 'Gallery'], ['1995 coupe', 'Gallery'], ['Suspension', 'Partner'], ['Detailing', 'Service'], ['FAQ', 'Page']].map(([a, b]) => ({ a, b })),
-      colors: { bg: '#111214', fg: '#EDE8DF', head: '#111214', headFg: '#EDE8DF', cta: '#D9A441', ctaFg: '#111214', card: '#1D1E21', img: '#3A3B40', line: '#3A3B40' },
+      colors: { bg: '#111214', fg: '#EDE8DF', head: '#111214', headFg: '#EDE8DF', cta: '#E5480D', ctaFg: '#15161A', card: '#1D1E21', img: '#34353A', line: '#3A3B40' },
     },
   },
   {
@@ -73,7 +73,7 @@ export const TILES: Tile[] = [
       brand: 'LOW LIGHT STUDIO', hero: 'Shows recorded in the room next door.', cta: 'Book the studio',
       chips: ['Shows', 'Episodes', 'Studios'],
       rows: [['Ep. 14', '42 min'], ['Ep. 13', '38 min'], ['Ep. 12', '51 min'], ['Ep. 11', '33 min'], ['Ep. 10', '27 min'], ['Ep. 09', '45 min'], ['Studio A', 'Podcast'], ['Studio B', 'Video'], ['Studio C', 'Live'], ['Ep. 08', '29 min'], ['Ep. 07', '36 min'], ['Ep. 06', '40 min']].map(([a, b]) => ({ a, b })),
-      colors: { bg: '#F3EEFA', fg: '#231D33', head: '#2A2340', headFg: '#FFFFFF', cta: '#FFFFFF', ctaFg: '#2A2340', card: '#FFFFFF', img: '#D6CCE8', line: '#CFC4E2' },
+      colors: { bg: '#F7F5F0', fg: '#15161A', head: '#2A2B30', headFg: '#F7F5F0', cta: '#E5480D', ctaFg: '#15161A', card: '#FFFFFF', img: '#DAD6CE', line: '#CFCBC3' },
     },
   },
   {
@@ -85,7 +85,7 @@ export const TILES: Tile[] = [
       brand: 'NORTHLINE STAFFING', hero: 'The right people, on site Monday.', cta: 'Find talent',
       chips: ['Industrial', 'Office', 'Hospitality', 'IT'],
       rows: [['Industrial', 'Industry'], ['Office', 'Industry'], ['Hospitality', 'Industry'], ['Finance', 'Industry'], ['IT', 'Industry'], ['Executive', 'Industry'], ['Location 01', 'Office'], ['Location 02', 'Office'], ['Location 03', 'Office'], ['Location 04', 'Office'], ['Location 05', 'Office'], ['Open roles', 'Jobs']].map(([a, b]) => ({ a, b })),
-      colors: { bg: '#F1F4EF', fg: '#1C2A1F', head: '#1F3A2A', headFg: '#FFFFFF', cta: '#E8C547', ctaFg: '#1F3A2A', card: '#FFFFFF', img: '#C9D6C6', line: '#BFCCBC' },
+      colors: { bg: '#FFFFFF', fg: '#15161A', head: '#E9E6E0', headFg: '#15161A', cta: '#15161A', ctaFg: '#F7F5F0', card: '#F3F1EC', img: '#D8D4CC', line: '#CFCBC3' },
     },
   },
   {
@@ -97,7 +97,7 @@ export const TILES: Tile[] = [
       brand: 'LITTLE OAK', hero: 'Where curious kids grow into confident ones.', cta: 'Schedule a tour',
       chips: ['Infants', 'Toddlers', 'Preschool'],
       rows: [['Campus 01', 'Tour'], ['Campus 02', 'Tour'], ['Campus 03', 'Tour'], ['Campus 04', 'Tour'], ['Campus 05', 'Tour'], ['Campus 06', 'Tour'], ['First week', 'Article'], ['Outdoor play', 'Article'], ['Routines', 'Article'], ['Milestones', 'Article'], ['Nutrition', 'Article'], ['Readiness', 'Article']].map(([a, b]) => ({ a, b })),
-      colors: { bg: '#FFF9EC', fg: '#3A2A12', head: '#F4B63F', headFg: '#3A2A12', cta: '#3A2A12', ctaFg: '#FFF9EC', card: '#FFFFFF', img: '#F6DFA8', line: '#EAD39A' },
+      colors: { bg: '#F7F5F0', fg: '#15161A', head: '#F1EEE8', headFg: '#15161A', cta: '#E5480D', ctaFg: '#15161A', card: '#FFFFFF', img: '#E2DED6', line: '#D6D2CB' },
     },
   },
   {
@@ -109,7 +109,7 @@ export const TILES: Tile[] = [
       brand: 'MAISON NOIR', hero: 'Something worth waiting for is almost here.', cta: 'Join the list',
       chips: ['Launch list', 'Members'],
       rows: [['Full name', 'Field'], ['Email', 'Field'], ['Phone', 'Field'], ['Interests', 'Field'], ['Join', 'Button'], ['Privacy', 'Link']].map(([a, b]) => ({ a, b })),
-      colors: { bg: '#1A0F10', fg: '#F2E9E1', head: '#1A0F10', headFg: '#F2E9E1', cta: '#E8B96A', ctaFg: '#1A0F10', card: '#2A1C1D', img: '#4A2F30', line: '#4A2F30' },
+      colors: { bg: '#0E0E10', fg: '#EDE8DF', head: '#0E0E10', headFg: '#EDE8DF', cta: '#EDE8DF', ctaFg: '#0E0E10', card: '#1B1B1E', img: '#2E2E33', line: '#333338' },
     },
   },
 ];

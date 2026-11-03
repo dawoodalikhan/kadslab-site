@@ -14,6 +14,6 @@ const { path } = Astro.props;
         <li><a href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.label}</a></li>
       ))}
     </ul>
-    <a class="btn btn-blue" style="padding: 12px 20px; font-size: 15px" href="/contact/" aria-current={path === '/contact/' ? 'page' : undefined}>Let's talk</a>
+    <a class="btn btn-accent" style="padding: 12px 20px; font-size: 15px" href="/contact/" aria-current={path === '/contact/' ? 'page' : undefined}>Let's talk</a>
   </nav>
 </header>

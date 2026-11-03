@@ -30,7 +30,7 @@ export default function LeadRouting({ showEmail = false }: { showEmail?: boolean
       <ol aria-live="polite" style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 10 }}>
         {steps.map((s, i) => (
           <li key={s.stage + i} style={{ display: 'flex', gap: 16, alignItems: 'center', background: '#fff', border: '1px solid var(--line)', borderRadius: 18, padding: '16px 20px' }}>
-            <span aria-hidden="true" style={{ flex: '0 0 34px', height: 34, borderRadius: '50%', background: 'var(--blue)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--mono)', fontSize: 13 }}>{i + 1}</span>
+            <span aria-hidden="true" style={{ flex: '0 0 34px', height: 34, borderRadius: '50%', background: 'var(--accent)', color: 'var(--ink)', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--mono)', fontSize: 13 }}>{i + 1}</span>
             <span>
               <span style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase' }}>{s.stage}</span>
               <span style={{ display: 'block', marginTop: 3, fontSize: 16, fontWeight: 500 }}>{s.text}</span>

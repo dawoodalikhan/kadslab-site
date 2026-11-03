@@ -7,13 +7,14 @@ import { JOBS, PRINCIPLES, SITE } from '../data/site';
   <section class="wrap row" style="padding-block: 88px 96px; gap: 56px; align-items: center">
     <div class="grow">
       <span class="eyebrow">About · Dawood Ali Khan</span>
-      <h1 style="margin: 16px 0 0; font-size: clamp(48px, 6.4vw, 100px); line-height: .95; letter-spacing: -.05em">I sit between <span class="accent">the business</span> and the build.</h1>
+      <h1 style="margin: 16px 0 0; font-size: clamp(48px, 6.4vw, 100px); line-height: .95; letter-spacing: -.035em">I sit between <span class="accent">the business</span> and the build.</h1>
       <p class="lead" style="margin-top: 28px; font-size: 20px">I studied computer science with a focus on machine learning, and did my final-year projects in embedded systems and big data. Then I moved into the web: Laravel APIs and CMS plugins first, then leading a development team shipping client sites. Today I run discovery, make the architecture calls, and still write the code.</p>
       <p class="lead" style="margin-top: 18px; font-size: 17px">KADS Lab is the name I put on that work: Knowledge, Architecture, Development, Systems. It’s the order I work in. I use AI tools every day, and I review every line before it ships.</p>
     </div>
-    <div aria-label="Portrait coming soon" role="img" style="flex: 1 1 320px; max-width: 440px; aspect-ratio: 4 / 5; border-radius: 28px; background: #E6E2DA; display: flex; align-items: flex-end; padding: 20px; transform: rotate(-2deg)">
-      <span class="mono" style="font-size: 12px; color: var(--muted)">Portrait coming soon</span>
-    </div>
+    <picture style="flex: 1 1 320px; max-width: 440px; display: block">
+      <source srcset="/dawood.webp" type="image/webp" />
+      <img src="/dawood.jpg" alt="Portrait of Dawood Ali Khan" width="880" height="1100" loading="eager" style="width: 100%; height: auto; border-radius: 28px; filter: grayscale(1) contrast(1.05)" />
+    </picture>
   </section>
 
   <section class="dark section">
@@ -23,7 +24,7 @@ import { JOBS, PRINCIPLES, SITE } from '../data/site';
         <ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(6, minmax(190px, 1fr)); border-top: 2px solid var(--paper)">
           {JOBS.map((j, i) => (
             <li style="padding-right: 20px; position: relative">
-              <span aria-hidden="true" style={`position: absolute; top: -7px; left: 0; width: 12px; height: 12px; border-radius: 50%; background: ${i === 0 ? 'var(--blue)' : i === JOBS.length - 1 ? 'var(--orange)' : 'var(--paper)'}`}></span>
+              <span aria-hidden="true" style={`position: absolute; top: -7px; left: 0; width: 12px; height: 12px; border-radius: 50%; background: ${i === 0 ? 'var(--accent)' : i === JOBS.length - 1 ? 'var(--orange)' : 'var(--paper)'}`}></span>
               <span class="mono" style="display: block; margin-top: 24px; font-size: 12px; color: #A8A9B0">{j.years}</span>
               <span style="display: block; margin-top: 8px; font-size: 18px; font-weight: 600; line-height: 1.25">{j.role}</span>
               <span style="display: block; margin-top: 6px; font-size: 15px; color: #C8C9CE">{j.org}</span>
