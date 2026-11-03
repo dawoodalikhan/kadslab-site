@@ -243,3 +243,74 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .guide { transition: none; }
 }
 @media print { .guide, .guide-restore { display: none; } }
+
+/* Avatar: full body, variants and new activities */
+.av-v-line :is(path, rect, ellipse, circle):not([stroke]) { stroke: #15161A; stroke-width: 1.5; }
+.av-legl { transform-origin: 49px 148px; } .av-legr { transform-origin: 71px 148px; }
+.av-walk .av-legl { animation: legSwing .45s ease-in-out infinite alternate; }
+.av-walk .av-legr { animation: legSwing .45s ease-in-out infinite alternate-reverse; }
+@keyframes legSwing { from { transform: rotate(-16deg); } to { transform: rotate(16deg); } }
+.av-walk .av-arm { animation: armSwingR .45s ease-in-out infinite alternate; }
+.av-walk .av-larm { animation: armSwingL .45s ease-in-out infinite alternate; }
+@keyframes armSwingR { from { transform: rotate(150deg); } to { transform: rotate(172deg); } }
+@keyframes armSwingL { from { transform: rotate(10deg); } to { transform: rotate(-12deg); } }
+.av-walk .av-body, .av-walk .av-head { animation: walkBob .225s ease-in-out infinite alternate; }
+@keyframes walkBob { to { transform: translateY(-2px); } }
+.av-sit .av-legl { animation: dangle 1.6s ease-in-out infinite alternate; }
+.av-sit .av-legr { animation: dangle 1.6s ease-in-out infinite alternate-reverse; }
+@keyframes dangle { from { transform: rotate(-7deg); } to { transform: rotate(9deg); } }
+.av-mouth { transform-origin: 60px 84px; }
+.av-talk .av-mouth { animation: talk .28s ease-in-out infinite alternate; }
+@keyframes talk { from { transform: scaleY(.55); } to { transform: scaleY(1.05); } }
+.av-think { animation: sigPop 1.8s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .av-legl, .av-legr, .av-walk .av-arm, .av-walk .av-larm, .av-walk .av-body, .av-walk .av-head, .av-mouth, .av-think { animation: none !important; }
+}
+
+/* ---------- Digital Dawood (v2) ---------- */
+.twin { position: fixed; z-index: 40; pointer-events: none; }
+.twin > * { pointer-events: auto; }
+.twin-btn { all: unset; pointer-events: auto; cursor: pointer; display: block; filter: drop-shadow(0 8px 14px rgba(21,22,26,.18)); }
+.twin-btn > svg { display: block; width: 100%; height: auto; }
+.twin-btn.hopping > svg { animation: twinHop .75s cubic-bezier(.3,.7,.4,1); }
+@keyframes twinHop { 0% { transform: translateY(0); } 45% { transform: translateY(-46px); } 100% { transform: translateY(0); } }
+.twin-btn:focus-visible { outline: 3px solid var(--accent-ink); outline-offset: 2px; border-radius: 16px; }
+.twin .guide-signal { right: -6px; top: -4px; }
+.twin-left .guide-signal { right: auto; left: -6px; }
+.twin-bubble { right: -6px; bottom: calc(100% + 6px); }
+.twin-left .twin-bubble { right: auto; left: -6px; }
+.twin-left .twin-bubble::after { right: auto; left: 40px; }
+.twin-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.twin-actions button { border: 1px solid var(--ink); background: var(--white); color: var(--ink); border-radius: 999px; padding: 6px 10px; font-family: var(--mono); font-size: 11px; cursor: pointer; }
+.twin-actions button:first-child { background: var(--accent); }
+.twin-bug { position: fixed; z-index: 39; width: 12px; height: 9px; border-radius: 6px 6px 4px 4px; background: var(--ink); animation: bugRun 2.4s linear forwards; pointer-events: none; }
+.twin-bug::before, .twin-bug::after { content: ''; position: absolute; top: 3px; width: 18px; left: -3px; height: 1px; background: var(--ink); }
+.twin-bug::after { top: 6px; }
+@keyframes bugRun { 0% { transform: translateX(0); } 50% { transform: translateX(-40px); } 100% { transform: translateX(-60px) scale(0); opacity: 0; } }
+.twin-toast { position: fixed; z-index: 41; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--paper); font-family: var(--mono); font-size: 12px; padding: 10px 16px; border-radius: 999px; border: 1px solid var(--accent); animation: bubbleIn .25s ease-out; }
+.twin-chat { position: fixed; z-index: 42; right: 20px; bottom: 20px; width: min(380px, calc(100vw - 24px)); max-height: min(560px, calc(100svh - 40px)); display: flex; flex-direction: column; background: var(--white); color: var(--ink); border: 2px solid var(--ink); border-radius: 20px; box-shadow: 0 24px 60px rgba(21,22,26,.28); overflow: hidden; animation: bubbleIn .25s ease-out; }
+.twin-chat header { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 16px; background: var(--ink); color: var(--paper); }
+.twin-chat header strong { display: block; font-family: var(--display); font-size: 16px; }
+.twin-chat header span { display: block; font-family: var(--mono); font-size: 10.5px; color: #A8A9B0; margin-top: 2px; }
+.twin-chat header button { all: unset; cursor: pointer; font-size: 24px; line-height: 1; padding: 0 4px; }
+.twin-log { flex: 1; min-height: 0; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.twin-msg { max-width: 88%; padding: 10px 13px; border-radius: 14px; font-size: 14.5px; line-height: 1.5; }
+.twin-msg p { margin: 0; }
+.twin-msg.me { align-self: flex-start; background: #F2F0EB; border-bottom-left-radius: 4px; }
+.twin-msg.you { align-self: flex-end; background: var(--accent); border-bottom-right-radius: 4px; }
+.twin-msg a { display: inline-block; margin-top: 8px; font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--accent-ink); }
+.twin-msg.typing { display: flex; gap: 4px; }
+.twin-msg.typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--ink); animation: dot 1.2s infinite; }
+.twin-msg.typing i:nth-child(2) { animation-delay: .15s; } .twin-msg.typing i:nth-child(3) { animation-delay: .3s; }
+.twin-sugg { flex: none; display: flex; gap: 6px; overflow-x: auto; padding: 0 16px 10px; }
+.twin-sugg button { flex: none; border: 1px solid var(--line-2); background: var(--white); border-radius: 999px; padding: 6px 10px; font-size: 12.5px; cursor: pointer; }
+.twin-sugg button:hover { border-color: var(--ink); }
+.twin-chat form { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--line-2); }
+.twin-chat input { flex: 1; min-width: 0; border: 1px solid var(--line-2); border-radius: 999px; padding: 10px 14px; font: inherit; font-size: 14px; }
+.twin-chat input:focus { outline: 2px solid var(--accent); border-color: var(--ink); }
+.twin-chat form button { border: 0; background: var(--ink); color: var(--paper); border-radius: 999px; padding: 0 16px; font-weight: 600; cursor: pointer; }
+.twin-chat footer { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 8px 14px 12px; font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+.twin-chat footer button { border: 0; background: none; padding: 0; font: inherit; color: var(--ink-2); text-decoration: underline; cursor: pointer; }
+.twin-chat footer span { margin-left: auto; }
+@media (prefers-reduced-motion: reduce) { .twin-btn.hopping > svg, .twin-bug { animation: none !important; } .twin { transition: none !important; } }
+@media print { .twin, .twin-chat, .twin-toast { display: none; } }
