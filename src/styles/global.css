@@ -193,8 +193,26 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @keyframes avBob { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg) translateY(-1px); } }
 .av-eyes { transform-origin: 60px 62px; animation: avBlink 4.6s infinite; }
 @keyframes avBlink { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
-.av-arm { transform-origin: 90px 122px; }
-.guide-btn.unread .av-arm { animation: avWave 1.1s ease-in-out infinite; }
+.av-arm { transform-origin: 90px 122px; transition: transform .45s cubic-bezier(.3,1.3,.5,1); }
+.av-larm { transform-origin: 30px 126px; transition: transform .45s cubic-bezier(.3,1.3,.5,1); }
+.av-arm.waving { animation: avWave 1.1s ease-in-out infinite; }
+.av-brows { transition: transform .2s; }
+.av-steam { animation: steam 1.6s ease-in-out infinite; }
+@keyframes steam { 0% { opacity: 0; transform: translateY(4px); } 50% { opacity: 1; } 100% { opacity: 0; transform: translateY(-4px); } }
+.av-keys circle { animation: dot .5s infinite; } .av-keys circle:nth-child(2) { animation-delay: .17s; } .av-keys circle:nth-child(3) { animation-delay: .34s; }
+.av-laptop { animation: laptopIn .3s ease-out; }
+@keyframes laptopIn { from { transform: translateY(10px); opacity: 0; } to { transform: none; opacity: 1; } }
+.av-gear { animation: spin 2.4s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.av-screen { animation: dot 1.4s infinite; }
+.av-zzz text { animation: zzz 2.4s ease-in-out infinite; } .av-zzz text:nth-child(2) { animation-delay: .4s; } .av-zzz text:nth-child(3) { animation-delay: .8s; }
+@keyframes zzz { 0%, 100% { opacity: .2; transform: translateY(2px); } 50% { opacity: 1; transform: translateY(-3px); } }
+.av-ball { animation: juggle 1.8s linear infinite; }
+@keyframes juggle { 0% { transform: translate(30px, 2px); } 25% { transform: translate(40px, -30px); } 50% { transform: translate(80px, -30px); } 62% { transform: translate(90px, 2px); } 81% { transform: translate(60px, -10px); } 100% { transform: translate(30px, 2px); } }
+.av-sleep .av-head { animation-duration: 5s; }
+.guide .guide-btn > svg { transition: transform .5s cubic-bezier(.3,1.2,.5,1); }
+.guide.peek .guide-btn > svg { transform: translateY(58%); }
+.guide-link { font-family: var(--mono); font-size: 11px; color: var(--accent-ink); }
 @keyframes avWave { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-14deg); } 75% { transform: rotate(10deg); } }
 .guide-signal { position: absolute; top: -18px; right: 8px; display: flex; align-items: center; justify-content: center; gap: 3px; min-width: 34px; height: 30px; padding: 0 8px; border-radius: 16px; background: var(--white); border: 2px solid var(--ink); font-family: var(--display); font-weight: 800; font-size: 16px; color: var(--accent); animation: sigPop 1.6s ease-in-out infinite; pointer-events: none; }
 .guide-left .guide-signal { right: auto; left: 8px; }
@@ -217,11 +235,11 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (max-width: 760px) {
   .guide { width: 84px; }
   .guide-right { left: calc(100% - 92px); }
-  .guide-btn svg { width: 66px; height: 86px; }
+  .guide-btn svg { width: 72px; height: 118px; }
   .guide-bubble { width: min(260px, calc(100vw - 32px)); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .guide-btn, .av-head, .av-eyes, .guide-signal, .guide-signal i, .guide-btn.unread .av-arm { animation: none !important; }
+  .guide-btn, .av-head, .av-eyes, .guide-signal, .guide-signal i, .av-arm.waving, .av-ball, .av-gear, .av-steam, .av-keys circle, .av-zzz text, .av-screen { animation: none !important; }
   .guide { transition: none; }
 }
 @media print { .guide, .guide-restore { display: none; } }
