@@ -4,7 +4,7 @@ import Drawers from '../components/Drawers';
 import { JOBS, PRINCIPLES, SITE } from '../data/site';
 ---
 <Base title="About" path="/about/" description="About Dawood Ali Khan: computer science graduate, former lead web developer, and digital solutions consultant in Chicago. The story behind KADS Lab.">
-  <section class="wrap row" style="padding-block: 88px 96px; gap: 56px; align-items: center">
+  <section class="wrap row" style="padding-block: 88px 96px; gap: 56px; align-items: center" data-guide="That’s me on the right. I’m the animated version." data-guide-kind="thought">
     <div class="grow">
       <span class="eyebrow">About · Dawood Ali Khan</span>
       <h1 style="margin: 16px 0 0; font-size: clamp(48px, 6.4vw, 100px); line-height: .95; letter-spacing: -.035em">I sit between <span class="accent">the business</span> and the build.</h1>
@@ -35,7 +35,7 @@ import { JOBS, PRINCIPLES, SITE } from '../data/site';
     </div>
   </section>
 
-  <section class="wrap row section">
+  <section class="wrap row section" data-guide="Open a drawer to see which tools I reach for, and why.">
     <h2 class="h-section side" style="font-size: clamp(34px, 4vw, 56px)">The toolbox, and what each drawer is for</h2>
     <div class="grow"><Drawers client:visible /></div>
   </section>
