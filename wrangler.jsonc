@@ -1,0 +1,11 @@
+{
+  // Cloudflare Workers with Static Assets. Workers Builds runs
+  // `npm run build` on every push and serves ./dist.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kadslab-site",
+  "compatibility_date": "2026-11-03",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

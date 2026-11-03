@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactForm from '../components/ContactForm';
+import { SITE } from '../data/site';
+const rows = [
+  { k: 'Email', v: SITE.email, href: `mailto:${SITE.email}` },
+  { k: 'LinkedIn', v: 'dawood-ali-khan ↗', href: SITE.linkedin },
+  { k: 'GitHub', v: 'dawoodalikhan ↗', href: SITE.github },
+  { k: 'Resume', v: 'PDF ↓', href: SITE.resume },
+  { k: 'Based in', v: SITE.location },
+];
+---
+<Base title="Contact" path="/contact/" description="Contact Dawood Ali Khan about a full-time role, a website or systems project, or consulting." bodyClass="contact-page">
+  <section class="dark">
+    <div class="wrap row" style="padding-block: 96px 112px; gap: 64px">
+      <div style="flex: 1 1 420px">
+        <span class="eyebrow">§ Contact</span>
+        <h1 style="margin: 16px 0 0; font-size: clamp(48px, 6vw, 96px); line-height: .95; letter-spacing: -.05em">Have a problem that needs <span class="accent-orange">a system?</span></h1>
+        <p style="margin-top: 24px; font-size: 18px; color: #C8C9CE; max-width: 460px">I read every message and reply within two business days.</p>
+        <ul class="mono" style="margin: 48px 0 0; padding: 0; list-style: none; font-size: 14px; border-top: 1px solid #3A3B40">
+          {rows.map((r) => (
+            <li style="display: flex; justify-content: space-between; gap: 16px; padding: 16px 0; border-bottom: 1px solid #3A3B40"><span style="color: #A8A9B0; text-transform: uppercase">{r.k}</span>{r.href ? <a href={r.href}>{r.v}</a> : <span>{r.v}</span>}</li>
+          ))}
+        </ul>
+      </div>
+      <div class="grow"><ContactForm client:load email={SITE.email} /></div>
+    </div>
+  </section>
+</Base>
+<style is:global>
+  .contact-page .site-footer { background: var(--paper); }
+</style>

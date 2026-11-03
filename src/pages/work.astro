@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import WorkGrid from '../components/WorkGrid';
+import { TILES } from '../data/site';
+---
+<Base title="Work" path="/work/" description="Industry case studies from Dawood Ali Khan: listings engines, CRM lead routing, media platforms, multi-location SEO and content systems. Client details stay under NDA.">
+  <section class="wrap" style="padding-block: 88px 40px">
+    <span class="eyebrow">Work · {TILES.length} industry studies</span>
+    <h1 class="h-display" style="margin-top: 16px; max-width: 1100px">The problems are real. <span class="accent">The names stay private.</span></h1>
+    <p class="lead" style="margin-top: 24px">Client work is covered by NDA, so every screen here is an original concept in that industry. Hover a screen to see why it’s locked. The write-ups describe the problem, my role and the decisions, never the client.</p>
+  </section>
+  <section class="wrap" style="padding-bottom: 120px">
+    <WorkGrid client:load />
+  </section>
+  <section class="dark">
+    <div class="wrap" style="padding-block: 88px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 32px">
+      <h2 class="h-section" style="max-width: 760px">Want the full story behind a project? Ask me in an interview.</h2>
+      <a class="btn btn-orange" href="/contact/">Start a conversation →</a>
+    </div>
+  </section>
+</Base>

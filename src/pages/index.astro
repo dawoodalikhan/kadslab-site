@@ -1,0 +1,113 @@
+---
+import Base from '../layouts/Base.astro';
+import HeroDesk from '../components/HeroDesk';
+import LeadRouting from '../components/LeadRouting';
+import DeviceScroller from '../components/DeviceScroller';
+import ConceptPage from '../components/ConceptPage';
+import { TILES, RANGE, SITE } from '../data/site';
+
+const featured = TILES.slice(0, 3);
+const kads = [
+  { l: 'K', w: 'nowledge', d: 0 }, { l: 'A', w: 'rchitecture', d: 0.6 },
+  { l: 'D', w: 'evelopment', d: 1.2 }, { l: 'S', w: 'ystems', d: 1.8 },
+];
+---
+<Base title="Home" path="/" description="KADS Lab is the portfolio of Dawood Ali Khan, a Chicago digital solutions consultant and engineer who scopes, architects and builds web platforms, integrations and automation.">
+
+  <section class="wrap" style="padding-block: clamp(48px, 6vw, 88px) 56px">
+    <div class="row" style="align-items: center">
+      <div style="flex: 1 1 520px; min-width: 0">
+        <p class="kads" aria-label="KADS: Knowledge, Architecture, Development, Systems">
+          {kads.map((k, i) => (
+            <span class="kads-item" aria-hidden="true">
+              <span class="kads-l" style={`animation-delay: ${k.d}s;${i === 3 ? ' color: var(--blue);' : ''}`}>{k.l}</span>
+              <span class="kads-w" style={`animation-delay: ${k.d + 0.35}s;${i === 3 ? ' color: var(--blue);' : ''}`}>{k.w}</span>
+            </span>
+          ))}
+        </p>
+        <h1 class="kads-fade" style="margin: 28px 0 0; font-size: clamp(40px, 5vw, 76px); line-height: .98; letter-spacing: -.05em; font-weight: 700; animation-delay: 2.6s">Business problems in.<br /><span class="accent">Working systems</span> out.</h1>
+        <p class="lead" style="margin: 24px 0 0; max-width: 520px">I scope, architect and build the platforms, integrations and automations behind real businesses, and I lead the delivery from first call to launch.</p>
+        <div style="margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px">
+          <a class="btn btn-dark" href="/work/">See the work</a>
+          <a class="btn btn-ghost" href="/lab/">Try a live demo</a>
+        </div>
+        <dl class="grid-3" style="margin: 48px 0 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; max-width: 520px">
+          <div style="border-top: 2px solid var(--ink); padding-top: 12px"><dt style="font-size: 13px; color: var(--muted)">Years building</dt><dd style="margin: 4px 0 0; font-size: 36px; font-weight: 700; letter-spacing: -.03em">7+</dd></div>
+          <div style="border-top: 2px solid var(--ink); padding-top: 12px"><dt style="font-size: 13px; color: var(--muted)">Sites shipped</dt><dd style="margin: 4px 0 0; font-size: 36px; font-weight: 700; letter-spacing: -.03em">30+</dd></div>
+          <div style="border-top: 2px solid var(--blue); padding-top: 12px"><dt style="font-size: 13px; color: var(--muted)">Developers led</dt><dd class="accent" style="margin: 4px 0 0; font-size: 36px; font-weight: 700; letter-spacing: -.03em">5+</dd></div>
+        </dl>
+      </div>
+      <div style="flex: 1 1 520px; min-width: 0">
+        <HeroDesk client:load />
+      </div>
+    </div>
+  </section>
+
+  <section class="dark section">
+    <div class="wrap">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 20px">
+        <div>
+          <span class="eyebrow">Selected work</span>
+          <h2 class="h-section" style="margin-top: 12px">Real problems. Details under NDA.</h2>
+        </div>
+        <a href="/work/" style="font-weight: 600">All work →</a>
+      </div>
+      <div class="grid-3" style="margin-top: 56px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px">
+        {featured.map((t) => (
+          <div style="display: flex; flex-direction: column; gap: 18px">
+            <DeviceScroller label={t.industry} height={240}>
+              <ConceptPage mock={t.mock} />
+            </DeviceScroller>
+            <div>
+              <span class="eyebrow">{t.industry}</span>
+              <h3 style="margin: 8px 0 0; font-size: 22px; line-height: 1.2; letter-spacing: -.02em">{t.title}</h3>
+              <p style="margin: 8px 0 0; font-size: 15px; color: #C8C9CE">{t.line}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap section">
+    <div class="row" style="align-items: flex-start; gap: 40px">
+      <div class="side">
+        <span class="eyebrow">Lab · live demo</span>
+        <h2 class="h-section" style="margin-top: 12px; font-size: clamp(34px, 4vw, 56px)">Send a test inquiry. Watch where it goes.</h2>
+        <p style="margin-top: 18px; color: var(--ink-2)">Pick an inquiry type and the route, owner and follow-up change, the way a real CRM workflow would.</p>
+        <a href="/lab/" style="display: inline-block; margin-top: 12px; font-weight: 600">Open the Lab: 5 demos →</a>
+      </div>
+      <div class="grow">
+        <LeadRouting client:visible />
+      </div>
+    </div>
+  </section>
+
+  <section class="bp-grid rule-top rule-bottom">
+    <div class="wrap row" style="padding-block: 96px; align-items: flex-end">
+      <div class="grow">
+        <span class="eyebrow" style="color: var(--ink-2)">§ Engineering — the code side</span>
+        <h2 style="margin: 18px 0 0; font-size: clamp(38px, 5vw, 76px); line-height: .98; letter-spacing: -.05em; font-weight: 700">From DC motors to data clusters <span class="accent-orange">to the web.</span></h2>
+      </div>
+      <div class="side" style="display: flex; flex-direction: column; border-top: 1px solid var(--ink)">
+        {RANGE.map((r) => (
+          <div style="display: flex; justify-content: space-between; gap: 12px; padding: 14px 0; border-bottom: 1px solid #C9C5BD"><span style="font-weight: 600">{r.title}</span><span class="mono" style="font-size: 12px; color: var(--ink-2)">{r.when}</span></div>
+        ))}
+        <a href="/engineering/" class="mono" style="margin-top: 18px; font-size: 13px; text-transform: uppercase">Read the engineering page →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="dark">
+    <div class="wrap" style="padding-block: 104px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 32px">
+      <div>
+        <span class="eyebrow">§ Contact</span>
+        <h2 style="margin: 16px 0 0; font-size: clamp(40px, 5vw, 76px); line-height: .98; letter-spacing: -.05em; max-width: 820px">Have a problem that needs a system?</h2>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 12px">
+        <a class="btn btn-orange" href="/contact/">Start a conversation →</a>
+        <a class="btn btn-square" style="border-color: #5A5B62; color: var(--paper)" href={SITE.resume}>Resume ↓</a>
+      </div>
+    </div>
+  </section>
+</Base>

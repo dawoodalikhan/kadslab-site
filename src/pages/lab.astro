@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import LabDemos from '../components/LabDemos';
+---
+<Base title="Lab" path="/lab/" description="Five working demos built in React and TypeScript with synthetic data: portfolio filtering, CRM lead routing, a booking flow, a site inspector and a campaign dashboard.">
+  <section class="wrap" style="padding-block: 88px 48px">
+    <span class="eyebrow">Lab · 5 working demos · synthetic data</span>
+    <h1 class="h-display" style="margin-top: 16px">Don’t read about it. <span class="accent">Use it.</span></h1>
+    <p class="lead" style="margin-top: 24px">Each demo recreates a kind of problem I’ve solved for clients, built from scratch in React and TypeScript with made-up data.</p>
+  </section>
+  <section class="wrap" style="padding-bottom: 120px">
+    <LabDemos client:load />
+  </section>
+</Base>

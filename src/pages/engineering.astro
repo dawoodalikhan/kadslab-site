@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+import CodeTabs from '../components/CodeTabs';
+import { RANGE } from '../data/site';
+import deviceSrc from '../components/DeviceScroller.tsx?raw';
+import routeSrc from '../lib/route-lead.ts?raw';
+
+const files = [
+  { name: 'DeviceScroller.tsx', note: 'The laptop screens on the Work page: a typed React component with CSS-only scrolling (zero JavaScript in the browser) and an NDA overlay that never opens or enlarges.', code: deviceSrc },
+  { name: 'route-lead.ts', note: 'The routing rule behind the lead routing demo. Same shape I use when wiring real forms into CRM workflows.', code: routeSrc },
+];
+const arch = [
+  { name: 'Visitor’s browser', tech: 'HTML first', dark: false },
+  { name: 'Astro pages + React islands', tech: 'TypeScript', dark: false },
+  { name: 'Cloudflare Workers · static assets', tech: 'Edge CDN', dark: true },
+  { name: 'GitHub → Workers Builds', tech: 'CI/CD on every push', dark: false },
+];
+const standards = [
+  { n: 'S1', t: 'Typed end to end', d: 'Strict TypeScript across pages, components and data.' },
+  { n: 'S2', t: 'Accessible by default', d: 'Real buttons and labels, keyboard paths, visible focus, reduced-motion support.' },
+  { n: 'S3', t: 'Fast on a phone', d: 'Pages ship as HTML. React loads only for the interactive parts.' },
+  { n: 'S4', t: 'Open source', d: 'The whole site is public on GitHub, so you can read every line.' },
+];
+---
+<Base title="Engineering" path="/engineering/" description="The code side of KADS Lab: embedded systems, big data and seven years of web engineering, plus how this site is built with Astro, React, TypeScript and Cloudflare.">
+  <section class="bp-grid rule-bottom">
+    <div class="wrap" style="padding-block: 88px 80px">
+      <div class="eyebrow" style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--ink-2)"><span>§ Engineering — the code side</span><span>Fig. 00 · Range</span></div>
+      <h1 class="h-display" style="margin-top: 24px; max-width: 1150px">From DC motors to data clusters <span class="accent-orange">to the web.</span></h1>
+      <p class="lead" style="margin-top: 24px">I studied computer science with a focus on machine learning. My final-year college projects were in embedded systems and big data. Then I moved into the web, where I’ve built for the last seven years.</p>
+      <div class="grid-3" style="margin-top: 56px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--ink); border-left: 1px solid var(--ink)">
+        {RANGE.map((r) => (
+          <div style={`border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 28px 24px; display: flex; flex-direction: column; gap: 14px; min-height: 320px; background: ${r.dark ? 'var(--ink)' : 'var(--paper)'}; color: ${r.dark ? 'var(--paper)' : 'var(--ink)'}`}>
+            <span class="mono" style={`display: flex; justify-content: space-between; font-size: 12px; color: ${r.dark ? '#C8C9CE' : 'var(--ink-2)'}`}><span>{r.code}</span><span>{r.when}</span></span>
+            <h2 style="margin: 0; font-size: 28px; letter-spacing: -.03em; line-height: 1.1">{r.title}</h2>
+            <p style="margin: 0">{r.what}</p>
+            <span class="mono" style={`margin-top: auto; font-size: 12px; color: ${r.dark ? '#C8C9CE' : 'var(--ink-2)'}`}>{r.stack}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="rule-bottom">
+    <div class="wrap row" style="padding-block: 96px; gap: 40px; align-items: stretch">
+      <figure style="flex: 1 1 400px; margin: 0; display: flex; flex-direction: column; gap: 14px">
+        <figcaption class="eyebrow" style="color: var(--ink-2)">Fig. 01 · How this site runs</figcaption>
+        <h2 style="margin: 0; font-size: clamp(30px, 3vw, 44px); letter-spacing: -.04em">Behind the build</h2>
+        <ol style="margin: 0; padding: 0; list-style: none">
+          {arch.map((a, i) => (
+            <li>
+              <div style={`border: 1px solid var(--ink); padding: 14px 16px; display: flex; justify-content: space-between; gap: 12px; background: ${a.dark ? 'var(--ink)' : '#fff'}; color: ${a.dark ? 'var(--paper)' : 'var(--ink)'}`}><span style="font-weight: 600">{a.name}</span><span class="mono" style="font-size: 12px">{a.tech}</span></div>
+              {i < arch.length - 1 && <span aria-hidden="true" style="display: block; height: 22px; margin-left: 24px; border-left: 1.5px solid var(--orange)"></span>}
+            </li>
+          ))}
+        </ol>
+        <p style="margin: 6px 0 0; font-size: 15px; color: var(--ink-2)">Pages ship as plain HTML. React loads only where something is interactive, like the Lab demos and the hero desk.</p>
+      </figure>
+      <figure style="flex: 999 1 600px; min-width: 0; margin: 0; display: flex; flex-direction: column; gap: 12px">
+        <figcaption class="eyebrow" style="color: var(--ink-2)">Fig. 02 · Real code from this site</figcaption>
+        <CodeTabs client:visible files={files} />
+      </figure>
+    </div>
+  </section>
+
+  <section class="bp-grid">
+    <div class="wrap" style="padding-block: 96px">
+      <div class="eyebrow" style="color: var(--ink-2)">Fig. 03 · Engineering standards on this site</div>
+      <div class="grid-3" style="margin-top: 24px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--ink); border-left: 1px solid var(--ink)">
+        {standards.map((s) => (
+          <div style="border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); background: var(--paper); padding: 22px 20px; display: flex; flex-direction: column; gap: 10px; min-height: 180px"><span class="mono" style="font-size: 12px; color: var(--orange-ink)">{s.n}</span><h3 style="margin: 0; font-size: 20px; letter-spacing: -.02em">{s.t}</h3><p style="margin: 0; font-size: 15px; color: var(--ink-2)">{s.d}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
