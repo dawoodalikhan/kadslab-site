@@ -193,8 +193,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @keyframes avBob { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg) translateY(-1px); } }
 .av-eyes { transform-origin: 60px 62px; animation: avBlink 4.6s infinite; }
 @keyframes avBlink { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
-.av-arm { transform-origin: 90px 122px; transition: transform .45s cubic-bezier(.3,1.3,.5,1); }
-.av-larm { transform-origin: 30px 126px; transition: transform .45s cubic-bezier(.3,1.3,.5,1); }
+.av-arm { transform-origin: 94px 120px; transition: transform .45s cubic-bezier(.3,1.3,.5,1); }
+.av-larm { transform-origin: 24px 120px; transition: transform .45s cubic-bezier(.3,1.3,.5,1); }
 .av-arm.waving { animation: avWave 1.1s ease-in-out infinite; }
 .av-brows { transition: transform .2s; }
 .av-steam { animation: steam 1.6s ease-in-out infinite; }
