@@ -6,3 +6,6 @@ dist/
 .env.*
 .dev.vars
 .DS_Store
+
+# Client URLs for the showcase capture script
+scripts/showcase.local.json

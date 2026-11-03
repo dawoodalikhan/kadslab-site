@@ -3,11 +3,9 @@ import Base from '../layouts/Base.astro';
 import HeroDesk from '../components/HeroDesk';
 import KadsHero from '../components/KadsHero';
 import LeadRouting from '../components/LeadRouting';
-import DeviceScroller from '../components/DeviceScroller';
-import ConceptPage from '../components/ConceptPage';
-import { TILES, RANGE, SITE } from '../data/site';
+import ShowcaseGallery from '../components/ShowcaseGallery';
+import { RANGE, SITE } from '../data/site';
 
-const featured = TILES.slice(0, 3);
 ---
 <Base title="Home" path="/" description="KADS Lab is the portfolio of Dawood Ali Khan, a Chicago digital solutions consultant and engineer who scopes, architects and builds web platforms, integrations and automation.">
 
@@ -44,23 +42,12 @@ const featured = TILES.slice(0, 3);
       <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 20px">
         <div>
           <span class="eyebrow">Selected work</span>
-          <h2 class="h-section" style="margin-top: 12px">Real problems. Details under NDA.</h2>
+          <h2 class="h-section" style="margin-top: 12px">Shipped, live, and still running.</h2>
         </div>
         <a href="/work/" style="font-weight: 600">All work →</a>
       </div>
-      <div class="grid-3" style="margin-top: 56px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px">
-        {featured.map((t) => (
-          <div style="display: flex; flex-direction: column; gap: 18px">
-            <DeviceScroller label={t.industry} height={240}>
-              <ConceptPage mock={t.mock} />
-            </DeviceScroller>
-            <div>
-              <span class="eyebrow">{t.industry}</span>
-              <h3 style="margin: 8px 0 0; font-size: 22px; line-height: 1.2; letter-spacing: -.02em">{t.title}</h3>
-              <p style="margin: 8px 0 0; font-size: 15px; color: #C8C9CE">{t.line}</p>
-            </div>
-          </div>
-        ))}
+      <div style="margin-top: 56px">
+        <ShowcaseGallery client:visible limit={3} dark />
       </div>
     </div>
   </section>

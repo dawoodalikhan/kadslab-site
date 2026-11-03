@@ -8,7 +8,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "capture": "node scripts/capture-showcase.mjs"
   },
   "keywords": [],
   "author": "",
@@ -24,5 +25,8 @@
     "react-dom": "^19.3.1",
     "typescript": "^7.0.2"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "playwright": "^1.64.1"
+  }
 }

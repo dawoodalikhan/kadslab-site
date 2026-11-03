@@ -170,3 +170,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .nav-links::-webkit-scrollbar { display: none; }
   .nav-links a { padding: 8px 14px; font-size: 14px; white-space: nowrap; }
 }
+
+/* Live work showcase */
+.show-tile:focus-visible .mac-frame { outline: 3px solid var(--accent-ink); outline-offset: 4px; }
+.show-scroll { animation: showScroll 26s ease-in-out infinite alternate; will-change: transform; }
+@keyframes showScroll { 0%, 6% { transform: translateY(0); } 94%, 100% { transform: translateY(calc(-100% + 230px)); } }
+.show-tile:hover .show-scroll { animation-play-state: paused; }
+.show-hint { position: absolute; right: 12px; bottom: 12px; background: var(--ink); color: var(--paper); font-family: var(--mono); font-size: 11px; padding: 6px 10px; border-radius: 999px; opacity: 0; transition: opacity .25s; }
+.show-tile:hover .show-hint, .show-tile:focus-visible .show-hint { opacity: 1; }
+.show-dialog { border: 0; border-radius: 24px; padding: 0; width: min(640px, calc(100vw - 32px)); background: var(--paper); color: var(--ink); box-shadow: 0 40px 100px rgba(0,0,0,.35); }
+.show-dialog::backdrop { background: rgba(15,16,18,.6); backdrop-filter: blur(4px); }
+@media (prefers-reduced-motion: reduce) { .show-scroll { animation: none; } }
