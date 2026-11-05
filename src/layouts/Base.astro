@@ -45,6 +45,7 @@ const personLd = {
     <meta property="og:url" content={canonical} />
     <meta name="theme-color" content="#F7F5F0" />
     <script type="application/ld+json" set:html={JSON.stringify(personLd)} />
+    <slot name="head" />
   </head>
   <body class={bodyClass}>
     <a class="skip" href="#main">Skip to content</a>
