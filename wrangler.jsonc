@@ -1,8 +1,5 @@
 {
-  // Cloudflare Workers with Static Assets. Workers Builds runs
-  // `npm run build` on every push and serves ./dist.
-  // /api/* runs the Worker first (Digital Dawood's AI endpoint);
-  // everything else is served straight from the static assets.
+  // Cloudflare Workers with Static Assets
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "kadslab-site",
   "main": "worker/index.ts",
@@ -11,11 +8,21 @@
     "directory": "./dist",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": [
+      "/api/*"
+    ]
   },
+  // Production settings
   "vars": {
     "MODEL": "claude-haiku-5-5",
     "ALLOWED_ORIGINS": "https://kadslab.com,https://www.kadslab.com"
+  },
+  // Staging preview settings
+  "previews": {
+    "vars": {
+      "MODEL": "claude-haiku-5-5",
+      "ALLOWED_ORIGINS": "https://staging-kadslab-site.dawoodali-1071.workers.dev"
+    }
   }
-  // Secret (never committed): npx wrangler secret put ANTHROPIC_API_KEY
+  // Secret (never committed): ANTHROPIC_API_KEY
 }
