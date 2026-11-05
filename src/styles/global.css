@@ -299,6 +299,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .twin-msg.me { align-self: flex-start; background: #F2F0EB; border-bottom-left-radius: 4px; }
 .twin-msg.you { align-self: flex-end; background: var(--accent); border-bottom-right-radius: 4px; }
 .twin-msg a { display: inline-block; margin-top: 8px; font-family: var(--mono); font-size: 12px; font-weight: 600; color: var(--accent-ink); }
+.twin-msg .twin-src { display: block; margin-top: 6px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .02em; color: var(--ink-2); }
 .twin-msg.typing { display: flex; gap: 4px; }
 .twin-msg.typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--ink); animation: dot 1.2s infinite; }
 .twin-msg.typing i:nth-child(2) { animation-delay: .15s; } .twin-msg.typing i:nth-child(3) { animation-delay: .3s; }
