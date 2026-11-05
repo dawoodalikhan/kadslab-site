@@ -1,0 +1,91 @@
+---
+// "Coming to the Lab": four planned engineering areas. Static HTML + CSS, no
+// JavaScript. Cards are deliberately labeled as planned work, and each has
+// slots for a project page, live demo and repo that turn into real links
+// once `links` is filled in src/data/lab.ts. Nothing links anywhere yet.
+import { UPCOMING, type UpcomingArt } from '../../data/lab';
+
+const slots = [
+  { key: 'page', label: 'Project page' },
+  { key: 'demo', label: 'Live demo' },
+  { key: 'repo', label: 'GitHub repo' },
+] as const;
+const art: Record<UpcomingArt, string> = {
+  // Each illustration is a small circuit drawing. `.trace` paths animate on hover.
+  embedded: `
+    <rect class="a-board" x="8" y="8" width="304" height="144" rx="10"/>
+    <path class="trace" d="M40 40h50v30h40M40 120h70v-30h20M280 40h-60v30h-30M280 120h-50v-30h-40"/>
+    <path class="trace t2" d="M160 20v26M160 140v-26M100 80h30M190 80h30"/>
+    ${[40, 120].map((y) => `<circle class="a-via" cx="40" cy="${y}" r="4"/><circle class="a-via" cx="280" cy="${y}" r="4"/>`).join('')}
+    <rect class="a-chip" x="130" y="46" width="60" height="68" rx="4"/>
+    ${Array.from({ length: 6 }, (_, i) => `<rect class="a-pin" x="${122}" y="${52 + i * 10}" width="8" height="3"/><rect class="a-pin" x="${190}" y="${52 + i * 10}" width="8" height="3"/>`).join('')}
+    <text class="a-text" x="160" y="84" text-anchor="middle">MCU</text>
+    <path class="a-wave" d="M224 132h10v-10h10v10h10v-10h10v10h10v-10h10v10h10"/>`,
+  arduino: `
+    <rect class="a-board" x="8" y="8" width="304" height="144" rx="10"/>
+    <rect class="a-pcb" x="24" y="36" width="150" height="96" rx="8"/>
+    ${Array.from({ length: 10 }, (_, i) => `<rect class="a-pin" x="${40 + i * 12}" y="42" width="6" height="6"/>`).join('')}
+    <rect class="a-chip" x="70" y="88" width="80" height="22" rx="2"/>
+    <path class="trace" d="M88 48v20h120v-16M112 48v28h90v38h30"/>
+    <g class="a-servo"><circle class="a-ring" cx="244" cy="58" r="22"/><path class="a-arm" d="M244 58l18-14"/><circle class="a-via" cx="244" cy="58" r="4"/></g>
+    <circle class="a-led" cx="236" cy="114" r="7"/><circle class="a-led-glow" cx="236" cy="114" r="16"/>
+    <text class="a-text" x="99" y="126" text-anchor="middle">D9 ~PWM</text>`,
+  pi: `
+    <rect class="a-board" x="8" y="8" width="304" height="144" rx="10"/>
+    <rect class="a-pcb a-pcb-pi" x="22" y="26" width="196" height="112" rx="8"/>
+    ${Array.from({ length: 20 }, (_, i) => `<circle class="a-gpio" cx="${40 + i * 8.6}" cy="36" r="2"/><circle class="a-gpio" cx="${40 + i * 8.6}" cy="44" r="2"/>`).join('')}
+    <rect class="a-chip" x="58" y="66" width="46" height="46" rx="3"/>
+    <rect class="a-port" x="196" y="64" width="32" height="22" rx="2"/><rect class="a-port" x="196" y="94" width="32" height="22" rx="2"/>
+    <path class="trace" d="M104 80h40v-26M104 98h60v18h32"/>
+    <rect class="a-term" x="236" y="40" width="64" height="80" rx="6"/>
+    <text class="a-text a-mono" x="244" y="60">pi@lab</text><text class="a-text a-mono" x="244" y="76">$ ssh</text><text class="a-text a-mono a-caret" x="244" y="92">$ _</text>`,
+  iot: `
+    <rect class="a-board" x="8" y="8" width="304" height="144" rx="10"/>
+    <rect class="a-chip" x="30" y="92" width="44" height="36" rx="6"/><text class="a-text" x="52" y="114" text-anchor="middle">ESP</text>
+    <path class="a-arc" d="M40 82a16 16 0 0 1 24 0M34 74a26 26 0 0 1 36 0"/>
+    <path class="a-cloud" d="M134 58a18 18 0 0 1 34-8a14 14 0 0 1 24 10a12 12 0 0 1-4 23h-50a13 13 0 0 1-4-25z"/>
+    <path class="trace" d="M74 110C110 110 112 70 140 70M192 70c40 0 36 40 62 40"/>
+    <rect class="a-term" x="244" y="88" width="56" height="44" rx="5"/>
+    ${[0, 1, 2, 3].map((i) => `<rect class="a-bar" x="${252 + i * 11}" y="${124 - [12, 22, 16, 28][i]}" width="7" height="${[12, 22, 16, 28][i]}" rx="1.5"/>`).join('')}`,
+};
+---
+<section id="coming-soon" class="lab-section coming" aria-labelledby="coming-title"
+  data-guide="These are planned, not finished. The virtual hardware lab above is the first step toward them." data-guide-kind="thought" data-guide-mood="engineering">
+  <div class="lab-wrap">
+    <div class="lab-section-head">
+      <div>
+        <p class="lab-label">03 / roadmap · planned work</p>
+        <h2 id="coming-title" class="lab-h2">Coming to the Lab</h2>
+        <p class="lab-lead">Four engineering areas I’m building toward next. None of these are finished yet: each card becomes a write-up, a live demo and a public repo as it ships. The <a href="#hardware">virtual hardware lab</a> above is the first step, simulating in the browser what these projects will do on real boards.</p>
+      </div>
+    </div>
+
+    <ul class="coming-grid" role="list">
+      {UPCOMING.map((u, i) => (
+        <li class="coming-card" style={`--i:${i}`}>
+          <article aria-labelledby={`coming-${u.id}`}>
+            <div class="coming-art" aria-hidden="true">
+              <svg viewBox="0 0 320 160" set:html={art[u.art]} />
+            </div>
+            <div class="coming-body">
+              <p class="coming-badge"><span aria-hidden="true"></span>Coming soon</p>
+              <h3 id={`coming-${u.id}`} class="coming-title">{u.title}</h3>
+              <p class="coming-summary">{u.summary}</p>
+              <ul class="coming-topics" aria-label="Planned topics">
+                {u.topics.map((t) => <li>{t}</li>)}
+              </ul>
+              <ul class="coming-slots" aria-label="Planned resources">
+                {slots.map((s) => {
+                  const href = u.links?.[s.key];
+                  return href
+                    ? <li><a href={href}>{s.label} →</a></li>
+                    : <li class="is-pending">{s.label} <span>· not yet</span></li>;
+                })}
+              </ul>
+            </div>
+          </article>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

@@ -309,7 +309,7 @@ export default function DigitalTwin() {
   const suggestions = (() => {
     const p = typeof location !== 'undefined' ? location.pathname : '/';
     if (p.startsWith('/work')) return ['What was your role on these?', 'Why no client names?', 'How did you integrate the CRM?'];
-    if (p.startsWith('/lab')) return ['How does the lead routing work?', 'What stack is the Lab built with?'];
+    if (p.startsWith('/lab')) return ['How does the lead routing work?', 'What does the hardware lab simulate?', 'What stack is the Lab built with?'];
     if (p.startsWith('/engineering')) return ['How do you work?', 'Tell me about the motor project', 'How does Digital Dawood work?'];
     return ['What do you actually do?', 'How did you integrate the CRM?', 'Are you open to roles?'];
   })();

@@ -1,0 +1,16 @@
+---
+// Runs inline in <head>, before the page paints, so the Lab never flashes the
+// wrong theme. First-time visitors get dark (the V2 look); a theme the visitor
+// picks with the switcher is saved and used from then on.
+// `is:inline` tells Astro to leave this script exactly where it is, unbundled.
+---
+<script is:inline>
+  (function () {
+    var t;
+    try { t = localStorage.getItem('kads-lab-theme'); } catch (e) {}
+    if (t !== 'light') t = 'dark';
+    document.documentElement.setAttribute('data-lab-theme', t);
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (m) m.setAttribute('content', t === 'dark' ? '#11131A' : '#F7F5F0');
+  })();
+</script>

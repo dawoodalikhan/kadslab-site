@@ -1,0 +1,7 @@
+# KADS Lab: every page may be crawled. /api/ is the Digital Dawood endpoint
+# (POST only), so there's nothing there for search engines.
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://kadslab.com/sitemap.xml
