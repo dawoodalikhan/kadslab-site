@@ -42,7 +42,7 @@ function Tile({ item, onOpen, dark }: { item: ShowcaseItem; onOpen: () => void; 
   return (
     <button type="button" onClick={onOpen} className="show-tile" aria-label={`${item.title}: view details`}
       style={{ all: 'unset', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 14 }}>
-      <span className="mac" style={{ display: 'block' }}>
+      <span className="mac" data-perch="" data-perch-mood="inspect" style={{ display: 'block' }}>
         <span className="mac-frame" style={{ display: 'block' }}>
           <span className="mac-screen" style={{ display: 'block', height: 230, background: '#E6E2DA' }}>
             {missing ? (

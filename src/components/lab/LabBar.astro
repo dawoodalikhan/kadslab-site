@@ -1,0 +1,35 @@
+---
+// Sticky in-page navigation for the Lab. Highlights the section in view and
+// holds the theme switcher.
+import ThemeOrbit from './ThemeOrbit.astro';
+
+interface Props { sections: { id: string; label: string }[] }
+const { sections } = Astro.props;
+---
+<nav class="lab-bar" aria-label="Lab sections">
+  <div class="lab-wrap lab-bar-inner">
+    <a class="lab-bar-brand" href="#lab-top">kads<span>.lab</span></a>
+    <ul class="lab-bar-links">
+      {sections.map((s) => <li><a href={`#${s.id}`} data-lab-link={s.id}>./{s.label}</a></li>)}
+    </ul>
+    <ThemeOrbit />
+  </div>
+</nav>
+
+<script>
+  // Mark the section nearest the top of the viewport as current.
+  const links = new Map(
+    [...document.querySelectorAll<HTMLAnchorElement>('[data-lab-link]')].map((a) => [a.dataset.labLink!, a]),
+  );
+  const targets = [...links.keys()].map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el);
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (!e.isIntersecting) continue;
+        links.forEach((a, id) => (id === e.target.id ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current')));
+      }
+    },
+    { rootMargin: '-35% 0px -60% 0px' },
+  );
+  targets.forEach((t) => io.observe(t));
+</script>

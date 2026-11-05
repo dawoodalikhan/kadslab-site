@@ -1,14 +1,91 @@
 ---
 import Base from '../layouts/Base.astro';
 import LabDemos from '../components/LabDemos';
+import LabThemeScript from '../components/lab/LabThemeScript.astro';
+import LabBar from '../components/lab/LabBar.astro';
+import LabHero from '../components/lab/LabHero.astro';
+import LabComing from '../components/lab/LabComing.astro';
+import { EXPERIMENTS } from '../data/lab';
+import { SITE } from '../data/site';
+// Space Grotesk for Lab headings: Latin subset, two weights, self-hosted.
+import '@fontsource/space-grotesk/latin-500.css';
+import '@fontsource/space-grotesk/latin-700.css';
+// The hero headline uses the 700 weight: preloading it lets the browser fetch
+// the font in parallel with the CSS, so the headline settles sooner (LCP/CLS).
+import grotesk700 from '@fontsource/space-grotesk/files/space-grotesk-latin-700-normal.woff2?url';
+import '../styles/lab.css';
+
+// Sections listed in the sticky Lab bar.
+const sections = [
+  { id: 'experiments', label: 'experiments' },
+  { id: 'coming-soon', label: 'coming-soon' },
+];
+
+const url = new URL('/lab/', Astro.site).toString();
+const title = 'Interactive Web Experiments & Engineering Projects';
+const description = 'Six working React and TypeScript experiments, from CRM lead routing and an API site inspector to a virtual hardware lab, plus upcoming embedded and IoT projects.';
+const ogImage = new URL('/og/lab.jpg', Astro.site).toString();
+
+// Structured data: the page is a collection of six experiments, with a
+// breadcrumb. Upcoming projects are left out on purpose: they aren't built yet.
+const ld = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'CollectionPage',
+      '@id': `${url}#page`,
+      url,
+      name: `KADS Lab: ${title}`,
+      description,
+      isPartOf: { '@type': 'WebSite', name: SITE.name, url: 'https://kadslab.com/' },
+      author: { '@type': 'Person', name: SITE.owner, url: 'https://kadslab.com/' },
+      breadcrumb: { '@id': `${url}#breadcrumb` },
+      mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: EXPERIMENTS.length,
+        itemListElement: EXPERIMENTS.map((e, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item: { '@type': 'CreativeWork', name: e.name, description: `${e.summary} ${e.proves}`, url: `${url}#${e.id}` },
+        })),
+      },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      '@id': `${url}#breadcrumb`,
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://kadslab.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Lab', item: url },
+      ],
+    },
+  ],
+};
 ---
-<Base title="Lab" path="/lab/" description="Five working demos built in React and TypeScript with synthetic data: portfolio filtering, CRM lead routing, a booking flow, a site inspector and a campaign dashboard.">
-  <section class="wrap" style="padding-block: 88px 48px" data-guide="Everything here is a working demo. Me too: I’m a behavior-driven brand character, and I can be built for your site.">
-    <span class="eyebrow">Lab · 5 working demos · synthetic data</span>
-    <h1 class="h-display" style="margin-top: 16px">Don’t read about it. <span class="accent">Use it.</span></h1>
-    <p class="lead" style="margin-top: 24px">Each demo recreates a kind of problem I’ve solved for clients, built from scratch in React and TypeScript with made-up data.</p>
+<Base title={title} path="/lab/" bodyClass="lab-page" description={description}>
+  <Fragment slot="head">
+    <LabThemeScript />
+    <link rel="preload" href={grotesk700} as="font" type="font/woff2" crossorigin />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="KADS Lab: the glowing Lab Core surrounded by code fragments, with the headline Don’t read about it. Use it." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(ld)} />
+  </Fragment>
+  <LabBar sections={sections} />
+  <LabHero />
+  <section id="experiments" class="lab-section" aria-labelledby="experiments-title" data-perch data-perch-mood="inspect" data-guide="In lead routing, type a broken email. Bad leads get held for review instead of sent." data-guide-kind="thought" data-guide-mood="build">
+    <div class="lab-wrap">
+      <div class="lab-section-head">
+        <div>
+          <p class="lab-label">02 / experiments</p>
+          <h2 id="experiments-title" class="lab-h2">Six working demos. Pick one.</h2>
+        </div>
+      </div>
+      <LabDemos client:visible />
+    </div>
   </section>
-  <section class="wrap" style="padding-bottom: 120px" data-guide="In lead routing, type a broken email. Bad leads get held for review instead of sent." data-guide-kind="thought" data-guide-mood="build">
-    <LabDemos client:load />
-  </section>
+  <LabComing />
 </Base>

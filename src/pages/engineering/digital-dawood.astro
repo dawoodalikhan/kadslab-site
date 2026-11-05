@@ -1,0 +1,98 @@
+---
+import Base from '../../layouts/Base.astro';
+import CodeTabs from '../../components/CodeTabs';
+import knowledgeSrc from '../../data/knowledge.ts?raw';
+import workerSrc from '../../../worker/index.ts?raw';
+import answerSrc from '../../lib/twin-answer.ts?raw';
+
+const files = [
+  { name: 'worker/index.ts', note: 'The secure endpoint. Requests are origin-checked, validated and rate-limited. It answers from the knowledge base; only if an API key is configured as a Cloudflare secret does a model phrase the answer, and it only sees facts retrieved from the knowledge base.', code: workerSrc },
+  { name: 'twin-answer.ts', note: 'Knowledge-based answers with no AI and no cost. Every factual sentence comes verbatim from the knowledge base; it runs in the Worker and, if the Worker can’t be reached, in the browser.', code: answerSrc },
+  { name: 'knowledge.ts', note: 'The grounded knowledge base: every fact Digital Dawood is allowed to state. The same search runs in the Worker and in the browser.', code: knowledgeSrc },
+];
+
+const pipeline = [
+  { n: '01', t: 'Your activity', d: 'Scroll position, pointer movement, time on a section, and whether you’ve gone quiet. Kept in memory on this page only.' },
+  { n: '02', t: 'Context detection', d: 'Sections carry small data attributes describing what they show. An IntersectionObserver tells the character which one you’re reading.' },
+  { n: '03', t: 'Behavior decision', d: 'A weighted picker chooses what to do next: walk to a project card and point at it, type at a code panel, sit and read, grab a coffee.' },
+  { n: '04', t: 'State machine', d: 'One activity at a time, each with a minimum duration, so he never flickers between poses or interrupts himself.' },
+  { n: '05', t: 'Animation', d: 'An SVG rig with separately animated arms, legs, eyes, brows and mouth. Pure CSS transforms, so it runs on the GPU.' },
+  { n: '06', t: 'Answer', d: 'Only when you ask a question. Answers come from approved facts; an AI model phrases them only when one is enabled, and each answer is labeled. Nothing about movement or idling ever calls a server.' },
+];
+
+const states = ['idle', 'walk', 'jump', 'sit', 'wave', 'point', 'think', 'talk', 'typing', 'read', 'coffee', 'juggle', 'wrench', 'phone', 'stretch', 'sleep', 'surprised'];
+
+const rules = [
+  { t: 'No invented facts', d: 'Answers are built only from the knowledge base. If it isn’t there, he says so and points you to the Contact page.' },
+  { t: 'No secrets in the browser', d: 'If an AI key is used, it is a server-side secret. The browser only ever calls /api/ask on this domain.' },
+  { t: 'No tracking', d: 'No cookies, no visitor profiles. Your question and the page you’re on are sent when you ask; nothing else.' },
+  { t: 'Never in the way', d: 'He only perches on the top edges of cards, slides off when they scroll away, and can be paused or hidden at any time.' },
+  { t: 'Quiet by default', d: 'No audio. Signals are small dots or a “!” that reveal a message on hover, never a popup.' },
+  { t: 'Respects your settings', d: 'With reduced motion on, he stays put and stops animating. On phones he stays in the corner.' },
+];
+---
+<Base title="Digital Dawood · How it works" path="/engineering/digital-dawood/" description="How Digital Dawood works: a behavior-driven animated character with a local state machine, context detection and a grounded assistant behind a secure Cloudflare Worker, with optional AI.">
+  <section class="wrap" style="padding-block: 88px 56px" data-guide="This page is about how I work. Meta, I know." data-guide-kind="thought">
+    <a href="/engineering/" class="mono" style="font-size: 13px; color: var(--ink-2)">← Engineering</a>
+    <span class="eyebrow" style="display: block; margin-top: 24px">Technical breakdown</span>
+    <h1 class="h-display" style="margin-top: 16px">Not just a mascot. <span class="accent">A living interface.</span></h1>
+    <p class="lead" style="margin-top: 24px; max-width: 760px">Digital Dawood is a behavior-driven character. Most of what he does is decided locally, in your browser, for free. Questions about my work are answered only from facts I’ve written down; AI is optional, and when it’s on, its job is just to phrase those facts.</p>
+  </section>
+
+  <section class="bp-grid rule-top rule-bottom" data-guide="Six steps. Only the last one ever touches a server." data-guide-mood="build">
+    <div class="wrap" style="padding-block: 88px">
+      <div class="eyebrow" style="color: var(--ink-2)">Fig. 01 · The behavior pipeline</div>
+      <div data-perch data-perch-mood="inspect" style="margin-top: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); border-top: 1px solid var(--ink); border-left: 1px solid var(--ink)">
+        {pipeline.map((p) => (
+          <div style="border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); background: var(--paper); padding: 22px 20px; display: flex; flex-direction: column; gap: 10px; min-height: 170px">
+            <span class="mono" style="font-size: 12px; color: var(--orange-ink)">{p.n}</span>
+            <h3 style="margin: 0; font-size: 20px; letter-spacing: -.02em">{p.t}</h3>
+            <p style="margin: 0; font-size: 15px; color: var(--ink-2)">{p.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap row" style="padding-block: 96px; gap: 48px; align-items: flex-start" data-guide="Seventeen states so far. Rive or 3D is the upgrade path once there’s a proper rig." data-guide-kind="thought">
+    <div style="flex: 1 1 380px">
+      <div class="eyebrow" style="color: var(--ink-2)">Fig. 02 · Why SVG, not 3D</div>
+      <h2 style="margin: 12px 0 0; font-size: clamp(28px, 3vw, 40px); letter-spacing: -.03em">Light enough to live on every page.</h2>
+      <p style="margin-top: 16px; color: var(--ink-2)">A Three.js or Rive character looks great, but it needs a modeled, rigged asset and a heavier runtime on every page. An SVG rig driven by React state and CSS animation costs a few kilobytes, renders crisp at any size, and keeps the main thread free. The architecture keeps rendering separate from behavior, so the art can be swapped for a Rive rig later without touching the engine.</p>
+    </div>
+    <div style="flex: 1 1 420px">
+      <div class="eyebrow" style="color: var(--ink-2)">Animation states</div>
+      <ul class="mono" style="margin: 14px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px">
+        {states.map((s) => <li style="border: 1px solid var(--ink); padding: 6px 12px; border-radius: 999px">{s}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="dark" data-guide="These rules are the part I’m proudest of.">
+    <div class="wrap" style="padding-block: 96px">
+      <div class="eyebrow" style="color: var(--orange)">Fig. 03 · Ground rules</div>
+      <h2 class="h-section" style="margin-top: 12px; color: var(--paper)">Helpful, honest, and out of your way.</h2>
+      <div style="margin-top: 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 1px; background: #4A4C55; border: 1px solid #4A4C55">
+        {rules.map((r) => (
+          <div style="background: var(--ink); padding: 24px 22px">
+            <h3 style="margin: 0; font-size: 19px; color: var(--paper)">{r.t}</h3>
+            <p style="margin: 10px 0 0; font-size: 15px; color: #C9CAD0">{r.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="rule-bottom" data-guide="That’s my actual source code. Ask me how retrieval works." data-guide-mood="build">
+    <div class="wrap" style="padding-block: 96px">
+      <div class="eyebrow" style="color: var(--ink-2)">Fig. 04 · Real code behind him</div>
+      <div data-perch data-perch-mood="terminal" style="margin-top: 20px"><CodeTabs client:visible files={files} /></div>
+    </div>
+  </section>
+
+  <section class="wrap" style="padding-block: 96px 120px" data-guide="Want one of me for your own site? That’s a conversation I’d enjoy." data-guide-mood="contact">
+    <h2 class="h-section">Want a character like this on your product?</h2>
+    <p class="lead" style="margin-top: 16px; max-width: 700px">The same engine works for any brand: a guide for onboarding, a product explainer, or a support assistant grounded in your own docs.</p>
+    <a class="btn btn-dark" href="/contact/" style="margin-top: 28px">Let’s talk →</a>
+  </section>
+</Base>

@@ -1,0 +1,141 @@
+---
+// Lab hero with the interactive Lab Core, adapted from the Lovable V2 hero:
+// rotating line with caret, flow lines, floating code fragments with cursor
+// parallax. The V2 portrait slot becomes the glowing Core.
+//
+// No React here: everything is DOM + CSS variables, so the top of /lab ships
+// zero framework JavaScript. The cursor position is written to two CSS
+// variables (--mx, --my) once per animation frame, and CSS does the rest.
+import { EXPERIMENTS } from '../../data/lab';
+
+const words = ['Experiments.', 'Tools.', 'Systems.', 'Playgrounds.'];
+// Where each flow line meets its fragment (stage coordinates, 0–100).
+const end = (x: number, y: number) => ({ x: Math.min(x + 13, 92), y: y + 3 });
+---
+<section id="lab-top" class="lab-hero lab-grid-bg" data-lab-hero data-guide="Everything here is a working demo. Me too: I’m a behavior-driven brand character, and I can be built for your site.">
+  <div class="hero-spot" aria-hidden="true"></div>
+  <div class="lab-wrap hero-grid">
+    <div class="hero-copy lab-rise">
+      <p class="lab-label">// enter the lab · {EXPERIMENTS.length} live experiments</p>
+      <h1 class="lab-h1">Don’t read about it.<br /><span class="lab-gradient">Use it.</span></h1>
+      <p class="hero-rotator" aria-hidden="true">
+        <span class="hero-word" data-hero-word>{words[0]}</span><span class="hero-caret">_</span>
+      </p>
+      <p class="sr-only">{words.join(' ')}</p>
+      <p class="lab-lead">Each demo recreates a kind of problem I’ve solved for clients, built from scratch in React and TypeScript with made-up data.</p>
+      <div class="hero-ctas">
+        <a class="lab-btn lab-btn-primary" href="#experiments">Explore the experiments</a>
+        <a class="lab-btn lab-btn-ghost" href="#routing">Launch a demo →</a>
+      </div>
+    </div>
+
+    <div class="core-stage" data-core-stage>
+      <svg class="core-field" viewBox="0 0 100 100" aria-hidden="true">
+        <g class="core-orbit core-orbit-1"><circle cx="50" cy="50" r="27" /><circle class="core-sat" cx="77" cy="50" r="1.1" /></g>
+        <g class="core-orbit core-orbit-2"><circle cx="50" cy="50" r="36" /><circle class="core-sat" cx="50" cy="14" r=".9" /></g>
+        <g class="core-orbit core-orbit-3"><circle cx="50" cy="50" r="46" /><circle class="core-sat core-sat-coral" cx="4" cy="50" r="1" /></g>
+        {EXPERIMENTS.map((e) => {
+          const p = end(e.at.x, e.at.y);
+          return <line class="core-line" data-demo={e.id} x1="50" y1="50" x2={p.x} y2={p.y} />;
+        })}
+        <polygon class="core-deco floaty" points="91,32 96,37 91,42 86,37" />
+        <circle class="core-deco core-deco-coral" cx="90" cy="74" r="3.2" />
+      </svg>
+
+      <button type="button" class="core" data-core aria-label="Ping the Lab Core" aria-describedby="core-status">
+        <span class="core-halo"></span>
+        <span class="core-ring"></span>
+        <span class="core-body"></span>
+        <span class="core-ripple"></span>
+        <span class="core-text"><b>kads.core</b><small>{EXPERIMENTS.length} online</small></span>
+      </button>
+
+      {EXPERIMENTS.map((e, i) => (
+        <a class="core-frag" href={`#${e.id}`} data-demo={e.id}
+          aria-label={`Open the ${e.name} demo`}
+          style={`--x:${e.at.x}%;--y:${e.at.y}%;--d:${e.depth};--i:${i}`}>
+          <span class="core-frag-kind">{e.kind}</span>{e.fragment}
+        </a>
+      ))}
+
+      <p class="core-status" id="core-status" aria-live="polite" data-core-status>click the core to ping every experiment</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { EXPERIMENTS } from '../../data/lab';
+
+  const hero = document.querySelector<HTMLElement>('[data-lab-hero]');
+  const stage = hero?.querySelector<HTMLElement>('[data-core-stage]');
+  if (hero && stage) {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+    const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+    let visible = true;
+
+    // Pause every hero animation and timer while it's off-screen.
+    new IntersectionObserver(([e]) => {
+      visible = e!.isIntersecting;
+      hero.classList.toggle('is-offscreen', !visible);
+    }).observe(hero);
+
+    // 1. Cursor parallax: one write per animation frame, not per mouse event.
+    let frame = 0, mx = 0, my = 0;
+    hero.addEventListener('pointermove', (ev) => {
+      if (reduce.matches || !finePointer.matches) return;
+      const r = hero.getBoundingClientRect();
+      mx = (ev.clientX - r.left) / r.width - 0.5;
+      my = (ev.clientY - r.top) / r.height - 0.5;
+      if (!frame) frame = requestAnimationFrame(() => {
+        frame = 0;
+        hero.style.setProperty('--mx', mx.toFixed(3));
+        hero.style.setProperty('--my', my.toFixed(3));
+      });
+    });
+    hero.addEventListener('pointerleave', () => { hero.style.setProperty('--mx', '0'); hero.style.setProperty('--my', '0'); });
+
+    // 2. Rotating line (V2's identity rotator).
+    const word = hero.querySelector<HTMLElement>('[data-hero-word]')!;
+    const words = ['Experiments.', 'Tools.', 'Systems.', 'Playgrounds.'];
+    let w = 0;
+    setInterval(() => {
+      if (!visible || document.hidden || reduce.matches) return;
+      w = (w + 1) % words.length;
+      word.textContent = words[w]!;
+      word.classList.remove('lab-rise'); void word.offsetWidth; word.classList.add('lab-rise');
+    }, 2200);
+
+    // 3. Focus a fragment (hover or keyboard): its flow line lights up and the
+    //    Core leans toward it. Exposed as setFocus so the Project Universe can
+    //    drive the same effect in the next phase.
+    const lines = stage.querySelectorAll<SVGLineElement>('.core-line');
+    const frags = stage.querySelectorAll<HTMLElement>('.core-frag');
+    const setFocus = (id: string | null) => {
+      stage.toggleAttribute('data-focused', !!id);
+      lines.forEach((l) => l.classList.toggle('is-active', l.dataset.demo === id));
+      frags.forEach((f) => f.classList.toggle('is-active', f.dataset.demo === id));
+      const exp = EXPERIMENTS.find((e) => e.id === id);
+      stage.style.setProperty('--lean-x', exp ? String((exp.at.x + 12 - 50) / 50) : '0');
+      stage.style.setProperty('--lean-y', exp ? String((exp.at.y + 3 - 50) / 50) : '0');
+    };
+    frags.forEach((f) => {
+      f.addEventListener('pointerenter', () => setFocus(f.dataset.demo!));
+      f.addEventListener('pointerleave', () => setFocus(null));
+      f.addEventListener('focus', () => setFocus(f.dataset.demo!));
+      f.addEventListener('blur', () => setFocus(null));
+    });
+    document.addEventListener('lab:focus', (e) => setFocus((e as CustomEvent<string | null>).detail));
+
+    // 4. Ping: a ripple leaves the Core, travels the flow lines and each
+    //    fragment answers in turn.
+    const core = stage.querySelector<HTMLButtonElement>('[data-core]')!;
+    const status = stage.querySelector<HTMLElement>('[data-core-status]')!;
+    let pings = 0;
+    core.addEventListener('click', () => {
+      stage.classList.remove('is-pinging'); void stage.offsetWidth; stage.classList.add('is-pinging');
+      pings++;
+      status.textContent = `ping #${pings} → ${EXPERIMENTS.length}/${EXPERIMENTS.length} experiments responded`;
+      setTimeout(() => stage.classList.remove('is-pinging'), 1400);
+    });
+  }
+</script>

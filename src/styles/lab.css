@@ -1,0 +1,433 @@
+/* ==========================================================================
+   KADS Lab · /lab only
+   Imported by src/pages/lab.astro, so Astro ships it on that page alone.
+   Every rule is scoped under body.lab-page (or html[data-lab-theme], which
+   only /lab sets), so the rest of the site is untouched.
+   Colors come from the Lovable V2 palette (dark) plus a designed light theme.
+   ========================================================================== */
+
+/* ---------- Theme tokens ---------- */
+/* Dark is the default: it applies even if JavaScript never runs. */
+body.lab-page {
+  --lab-bg: oklch(0.15 0.015 270);
+  --lab-bg-2: oklch(0.12 0.015 270);
+  --lab-fg: oklch(0.97 0.004 270);
+  --lab-fg-2: oklch(0.86 0.01 270);
+  --lab-card: oklch(0.2 0.025 275);
+  --lab-card-2: oklch(0.24 0.03 275);
+  --lab-muted: oklch(0.22 0.025 275);
+  --lab-muted-fg: oklch(0.73 0.02 270);
+  --lab-border: oklch(1 0 0 / 10%);
+  --lab-border-strong: oklch(1 0 0 / 18%);
+  --lab-primary: oklch(0.85 0.11 195);
+  --lab-primary-fg: oklch(0.15 0.015 270);
+  --lab-secondary: oklch(0.62 0.21 285);
+  --lab-coral: oklch(0.72 0.14 30);
+  --lab-grid: oklch(1 0 0 / 5%);
+  --lab-glow: color-mix(in oklab, var(--lab-primary) 45%, transparent);
+  --lab-shadow: 0 0 60px -20px var(--lab-glow);
+  --lab-error: oklch(0.74 0.16 25);
+  --lab-ok: oklch(0.8 0.15 155);
+  --lab-header-bg: color-mix(in oklab, var(--lab-bg) 88%, transparent);
+
+  --lab-display: 'Space Grotesk', var(--display);
+  --lab-ui: var(--sans);
+  --lab-radius: 16px;
+  --lab-ease: cubic-bezier(.2, .7, .2, 1);
+
+  background: var(--lab-bg);
+  color: var(--lab-fg);
+  color-scheme: dark;
+}
+
+/* Light: a "daylight lab" built on the KADS paper tone, with deep teal and violet. */
+html[data-lab-theme="light"] body.lab-page {
+  --lab-bg: oklch(0.975 0.006 85);
+  --lab-bg-2: oklch(0.948 0.009 85);
+  --lab-fg: oklch(0.2 0.02 275);
+  --lab-fg-2: oklch(0.36 0.02 275);
+  --lab-card: oklch(1 0 0);
+  --lab-card-2: oklch(0.985 0.004 85);
+  --lab-muted: oklch(0.945 0.008 85);
+  --lab-muted-fg: oklch(0.45 0.02 275);
+  --lab-border: oklch(0.2 0.02 275 / 11%);
+  --lab-border-strong: oklch(0.2 0.02 275 / 22%);
+  --lab-primary: oklch(0.47 0.1 205);
+  --lab-primary-fg: oklch(0.99 0 0);
+  --lab-secondary: oklch(0.5 0.22 285);
+  --lab-coral: oklch(0.6 0.17 38);
+  --lab-grid: oklch(0.2 0.02 275 / 6%);
+  --lab-glow: color-mix(in oklab, var(--lab-primary) 28%, transparent);
+  --lab-shadow: 0 24px 50px -28px color-mix(in oklab, var(--lab-fg) 30%, transparent), 0 0 0 1px var(--lab-border);
+  --lab-error: #B4361A;
+  --lab-ok: #1F7A4C;
+  color-scheme: light;
+}
+
+/* ---------- Base ---------- */
+html:has(body.lab-page) { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html:has(body.lab-page) { scroll-behavior: auto; } }
+body.lab-page :focus-visible { outline: 2px solid var(--lab-primary); outline-offset: 3px; }
+body.lab-page a:hover { color: var(--lab-primary); }
+body.lab-page ::selection { background: color-mix(in oklab, var(--lab-primary) 35%, transparent); }
+
+.lab-wrap { width: 100%; max-width: 1280px; margin: 0 auto; padding-inline: clamp(16px, 4vw, 40px); }
+.lab-label { margin: 0; font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .2em; color: var(--lab-primary); }
+.lab-h1, .lab-h2 { margin: 0; font-family: var(--lab-display); font-weight: 700; letter-spacing: -.03em; color: var(--lab-fg); }
+.lab-h1 { font-size: clamp(44px, 7vw, 88px); line-height: 1.02; }
+.lab-h2 { margin-top: 12px; font-size: clamp(32px, 4.2vw, 52px); line-height: 1.05; }
+.lab-lead { margin: 20px 0 0; max-width: 620px; font-size: 18px; line-height: 1.6; color: var(--lab-muted-fg); }
+.lab-gradient {
+  background: linear-gradient(120deg, var(--lab-primary), var(--lab-secondary));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.lab-grid-bg {
+  background-image: linear-gradient(var(--lab-grid) 1px, transparent 1px), linear-gradient(90deg, var(--lab-grid) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.lab-section { padding-block: clamp(72px, 10vw, 112px); scroll-margin-top: 64px; }
+.lab-panel-surface { border: 1px solid var(--lab-border); border-radius: var(--lab-radius); background: var(--lab-card); }
+.lab-anchor { position: absolute; top: -80px; left: 0; width: 1px; height: 1px; pointer-events: none; }
+
+/* ---------- Site header & footer (small, scoped adjustment) ---------- */
+/* The header scrolls away on /lab; the Lab bar below takes over as sticky nav. */
+.lab-page .site-header {
+  position: relative;
+  background: var(--lab-header-bg);
+  border-bottom-color: var(--lab-border);
+  --ink: var(--lab-fg); --paper: var(--lab-bg); --white: var(--lab-card);
+  --line: var(--lab-border); --muted: var(--lab-muted-fg); --accent-ink: var(--lab-coral);
+  color: var(--lab-fg);
+}
+.lab-page .site-header .btn-accent { color: oklch(0.15 0.015 270); }
+.lab-page .site-footer {
+  border-top-color: var(--lab-border);
+  --ink-2: var(--lab-muted-fg);
+}
+
+/* ---------- Lab bar ---------- */
+.lab-bar {
+  position: sticky; top: 0; z-index: 30;
+  background: var(--lab-header-bg);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--lab-border);
+}
+.lab-bar-inner { display: flex; align-items: center; gap: 20px; height: 56px; font-family: var(--mono); font-size: 12px; }
+.lab-bar-brand { flex: none; text-decoration: none; font-family: var(--lab-display); font-size: 16px; font-weight: 700; color: var(--lab-fg); }
+.lab-bar-brand span { color: var(--lab-primary); }
+.lab-bar-links { flex: 1; min-width: 0; display: flex; gap: 4px; margin: 0; padding: 0; list-style: none; overflow-x: auto; scrollbar-width: none; }
+.lab-bar-links::-webkit-scrollbar { display: none; }
+.lab-bar-links a { display: block; padding: 6px 10px; border-radius: 8px; white-space: nowrap; text-decoration: none; color: var(--lab-muted-fg); transition: color .2s, background-color .2s; }
+.lab-bar-links a:hover { color: var(--lab-primary); }
+.lab-bar-links a[aria-current] { color: var(--lab-primary); background: color-mix(in oklab, var(--lab-primary) 12%, transparent); }
+
+/* ---------- Theme switcher (orbit) ---------- */
+.orbit-toggle {
+  flex: none; display: inline-flex; align-items: center; gap: 8px;
+  padding: 4px 12px 4px 6px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--lab-border-strong); background: var(--lab-card); color: var(--lab-fg);
+  font-family: var(--mono); font-size: 11px; text-transform: lowercase;
+  transition: border-color .2s, box-shadow .3s;
+}
+.orbit-toggle:hover { border-color: var(--lab-primary); box-shadow: 0 0 24px -6px var(--lab-glow); }
+.orbit-toggle svg { overflow: visible; }
+.orbit-ring { fill: none; stroke: var(--lab-border-strong); stroke-width: 1; stroke-dasharray: 2 3; }
+.orbit-planet { fill: var(--lab-primary); transition: fill .5s; }
+.orbit-bite { transition: transform .6s var(--lab-ease); }
+.orbit-rays line { stroke: var(--lab-coral); stroke-width: 1.6; stroke-linecap: round; }
+.orbit-rays { opacity: 0; transform: scale(.6) rotate(-30deg); transform-origin: 16px 16px; transition: opacity .4s, transform .6s var(--lab-ease); }
+.orbit-moon { fill: var(--lab-secondary); transform-origin: 16px 16px; transform: rotate(40deg); transition: transform .8s var(--lab-ease); }
+.orbit-toggle:hover .orbit-moon { transform: rotate(70deg); }
+/* Light: the bite slides off (full sun), rays appear, the moon swings round. */
+html[data-lab-theme="light"] .orbit-planet { fill: var(--lab-coral); }
+html[data-lab-theme="light"] .orbit-bite { transform: translate(14px, -14px); }
+html[data-lab-theme="light"] .orbit-rays { opacity: 1; transform: none; }
+html[data-lab-theme="light"] .orbit-moon { transform: rotate(220deg); }
+html[data-lab-theme="light"] .orbit-toggle:hover .orbit-moon { transform: rotate(250deg); }
+
+/* Circular reveal when switching theme (View Transitions API). */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-new(root) { animation: lab-reveal .65s var(--lab-ease, ease); }
+@keyframes lab-reveal {
+  from { clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0)); }
+  to { clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 50%) var(--vt-y, 0)); }
+}
+
+/* ---------- Shared motion (from V2) ---------- */
+@keyframes lab-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes lab-dash { to { stroke-dashoffset: -12; } }
+@keyframes lab-floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+@keyframes lab-blink { 50% { opacity: 0; } }
+@keyframes lab-spin { to { transform: rotate(360deg); } }
+.lab-rise { animation: lab-rise .8s var(--lab-ease) both; }
+
+/* ---------- Buttons ---------- */
+.lab-btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 14px 22px; border-radius: 10px;
+  font-size: 14px; font-weight: 600; text-decoration: none; border: 1px solid transparent;
+  transition: transform .2s var(--lab-ease), box-shadow .3s, border-color .2s, color .2s;
+}
+.lab-page .lab-btn-primary, .lab-page .lab-btn-primary:hover { background: var(--lab-primary); color: var(--lab-primary-fg); box-shadow: var(--lab-shadow); }
+.lab-page .lab-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px -8px var(--lab-glow); }
+.lab-page .lab-btn-ghost { border-color: var(--lab-border-strong); color: var(--lab-fg); font-family: var(--mono); font-weight: 500; }
+.lab-page .lab-btn-ghost:hover { border-color: var(--lab-primary); color: var(--lab-primary); }
+
+/* ---------- Hero ---------- */
+.lab-hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--lab-border); --mx: 0; --my: 0; }
+/* Soft light that drifts after the cursor. Moved with transform only, so the
+   browser can do it on the GPU without repainting the page. */
+.hero-spot {
+  position: absolute; left: 50%; top: 50%; width: 760px; height: 760px; margin: -380px 0 0 -380px; border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--lab-secondary) 24%, transparent), transparent);
+  transform: translate3d(calc(var(--mx) * 700px), calc(var(--my) * 400px), 0);
+  transition: transform .8s var(--lab-ease); pointer-events: none;
+}
+.hero-grid {
+  position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center;
+  gap: clamp(32px, 5vw, 72px); min-height: max(600px, calc(100svh - 138px)); padding-block: 56px 72px;
+}
+.lab-hero .lab-h1 { margin-top: 22px; font-size: clamp(42px, 5.6vw, 78px); }
+.hero-rotator { margin: 18px 0 0; height: 1.35em; overflow: hidden; font-family: var(--lab-display); font-size: clamp(22px, 2.6vw, 30px); font-weight: 500; color: var(--lab-muted-fg); }
+.hero-word { display: inline-block; }
+.hero-caret { color: var(--lab-primary); animation: lab-blink 1s steps(1) infinite; }
+.lab-hero .lab-lead { font-size: 17px; }
+.hero-ctas { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* ---------- Lab Core stage ---------- */
+.core-stage {
+  --lean-x: 0; --lean-y: 0;
+  position: relative; width: 100%; max-width: 520px; aspect-ratio: 1; margin-inline: auto;
+  transform: perspective(1100px) rotateX(calc(var(--my) * -8deg)) rotateY(calc(var(--mx) * 8deg));
+  transition: transform .5s var(--lab-ease);
+}
+.core-field { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; transform: translate3d(calc(var(--mx) * -10px), calc(var(--my) * -10px), 0); transition: transform .5s var(--lab-ease); }
+.core-orbit { transform-box: view-box; transform-origin: 50% 50%; animation: lab-spin 60s linear infinite; }
+.core-orbit > circle:first-child { fill: none; stroke: var(--lab-border-strong); stroke-width: .25; stroke-dasharray: .6 1.8; }
+.core-orbit-1 { animation-duration: 36s; }
+.core-orbit-2 { animation-duration: 64s; animation-direction: reverse; }
+.core-orbit-3 { animation-duration: 110s; }
+.core-sat { fill: var(--lab-primary); }
+.core-sat-coral { fill: var(--lab-coral); }
+.core-line {
+  stroke: var(--lab-secondary); stroke-width: .3; stroke-dasharray: 3 3; opacity: .75;
+  animation: lab-dash 1.6s linear infinite; transition: stroke .3s, stroke-width .3s, opacity .3s;
+}
+.core-stage[data-focused] .core-line:not(.is-active) { opacity: .18; }
+.core-line.is-active, .is-pinging .core-line { stroke: var(--lab-primary); stroke-width: .55; opacity: 1; animation-duration: .5s; }
+.core-deco { fill: none; stroke: var(--lab-primary); stroke-width: .4; }
+.core-deco.floaty { transform-box: fill-box; transform-origin: center; animation: lab-floaty 6s ease-in-out infinite; }
+.core-deco-coral { stroke: var(--lab-coral); }
+
+/* The Core: a button. Layers: halo → spinning ring → glowing body → ping ripple → label. */
+.core {
+  position: absolute; left: 50%; top: 50%; width: 34%; aspect-ratio: 1; margin: -17% 0 0 -17%;
+  padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer;
+  transform: translate3d(calc(var(--mx) * 16px + var(--lean-x) * 12px), calc(var(--my) * 16px + var(--lean-y) * 12px), 0);
+  transition: transform .5s var(--lab-ease);
+}
+.lab-page .core:focus-visible { outline-offset: 10px; border-radius: 50%; }
+.core > span { position: absolute; border-radius: 50%; pointer-events: none; }
+.core-halo {
+  inset: -48%;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--lab-primary) 32%, transparent), color-mix(in oklab, var(--lab-secondary) 14%, transparent) 55%, transparent);
+  animation: core-breathe 5s ease-in-out infinite;
+}
+.core-ring {
+  inset: -9%;
+  background: conic-gradient(from 0deg, transparent 0 22%, var(--lab-primary) 45%, var(--lab-secondary) 70%, transparent 88%);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 calc(100% - 2px));
+  animation: lab-spin 9s linear infinite;
+}
+.core-body {
+  inset: 0;
+  background: radial-gradient(circle at 34% 28%, color-mix(in oklab, #fff 80%, var(--lab-primary)) 0, var(--lab-primary) 24%, var(--lab-secondary) 64%, color-mix(in oklab, var(--lab-secondary) 45%, var(--lab-bg-2)) 100%);
+  box-shadow: 0 0 60px -6px var(--lab-glow), inset -14px -18px 40px color-mix(in oklab, var(--lab-bg-2) 50%, transparent);
+  transition: box-shadow .4s, transform .5s var(--lab-ease);
+}
+.core:hover .core-body, .core:focus-visible .core-body, .core-stage[data-focused] .core-body {
+  transform: scale(1.05);
+  box-shadow: 0 0 100px 4px var(--lab-glow), inset -14px -18px 40px color-mix(in oklab, var(--lab-bg-2) 50%, transparent);
+}
+.core-ripple { inset: 0; border: 2px solid var(--lab-primary); opacity: 0; }
+.is-pinging .core-ripple { animation: core-ripple 1.1s var(--lab-ease); }
+.core-text {
+  left: 50% !important; top: 50%; transform: translate(-50%, -50%); border-radius: 999px !important;
+  display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 12px; white-space: nowrap;
+  background: color-mix(in oklab, var(--lab-bg) 72%, transparent); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  font-family: var(--mono); color: var(--lab-fg);
+}
+.core-text b { font-size: 12px; font-weight: 500; }
+.core-text small { font-size: 10px; color: var(--lab-primary); }
+@keyframes core-breathe { 0%, 100% { transform: scale(1); opacity: .85; } 50% { transform: scale(1.08); opacity: 1; } }
+@keyframes core-ripple { from { transform: scale(1); opacity: .9; } to { transform: scale(2.7); opacity: 0; } }
+
+/* Code fragments: links to each demo. Parallax uses `transform`; the idle bob
+   uses the separate `translate` property so the two never fight. */
+.core-frag {
+  position: absolute; left: var(--x); top: var(--y); z-index: 2;
+  display: flex; flex-direction: column; gap: 2px; padding: 7px 10px; border-radius: 8px;
+  border: 1px solid var(--lab-border-strong); background: color-mix(in oklab, var(--lab-card) 86%, transparent);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  font-family: var(--mono); font-size: 11px; line-height: 1.35; color: var(--lab-primary); text-decoration: none; white-space: nowrap;
+  transform: translate3d(calc(var(--mx) * 42px * var(--d)), calc(var(--my) * 42px * var(--d)), 0);
+  transition: transform .35s var(--lab-ease), border-color .25s, box-shadow .3s, opacity .3s;
+  animation: frag-bob 7s ease-in-out infinite; animation-delay: calc(var(--i) * -1.4s);
+}
+.core-frag-kind { font-size: 9px; text-transform: uppercase; letter-spacing: .16em; color: var(--lab-muted-fg); }
+.lab-page .core-frag:hover, .core-frag.is-active { color: var(--lab-primary); border-color: var(--lab-primary); box-shadow: 0 0 32px -8px var(--lab-glow); }
+.core-stage[data-focused] .core-frag:not(.is-active) { opacity: .5; }
+/* A link holds still once you're on it. */
+.core-frag:hover, .core-frag:focus-visible { animation-play-state: paused; }
+.is-pinging .core-frag { animation: frag-bob 7s ease-in-out infinite, frag-ping .7s var(--lab-ease) calc(.3s + var(--i) * .12s); }
+@keyframes frag-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -6px; } }
+@keyframes frag-ping {
+  30% { border-color: var(--lab-primary); box-shadow: 0 0 0 4px color-mix(in oklab, var(--lab-primary) 25%, transparent), 0 0 36px -6px var(--lab-glow); }
+}
+.core-status { position: absolute; left: 0; right: 0; bottom: -34px; margin: 0; text-align: center; font-family: var(--mono); font-size: 11px; color: var(--lab-muted-fg); }
+
+/* Off-screen: freeze every hero animation (saves battery and CPU). */
+.lab-hero.is-offscreen *, .lab-hero.is-offscreen *::before, .lab-hero.is-offscreen *::after { animation-play-state: paused !important; }
+
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); min-height: 0; padding-block: 48px 88px; gap: 48px; }
+  .core-stage { max-width: 440px; }
+}
+@media (max-width: 480px) {
+  .core-frag { font-size: 9.5px; padding: 5px 7px; }
+  .core-frag-kind { font-size: 8px; }
+  .core-text b { font-size: 10px; } .core-text small { font-size: 9px; }
+  .core-text { padding: 4px 8px; }
+}
+/* Reduced motion: a still, composed scene. Everything stays clickable. */
+@media (prefers-reduced-motion: reduce) {
+  .lab-hero *, .lab-hero *::before, .lab-hero *::after, .lab-rise { animation: none !important; }
+  .hero-spot, .core-stage, .core-field, .core, .core-frag { transform: none !important; }
+}
+
+/* ---------- Experiments (the six demos) ---------- */
+.lab-section-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 40px; }
+
+/* Map the demos' tokens (src/lib/demo-tokens.ts) onto the Lab theme. */
+.lab-page .lab-demos {
+  --d-fg: var(--lab-fg);
+  --d-fg-2: var(--lab-fg-2);
+  --d-muted: var(--lab-muted-fg);
+  --d-line: var(--lab-border);
+  --d-line-2: var(--lab-border-strong);
+  --d-card: var(--lab-card);
+  --d-subtle: var(--lab-muted);
+  --d-accent: var(--lab-primary);
+  --d-on-accent: var(--lab-primary-fg);
+  --d-sel-bg: color-mix(in oklab, var(--lab-primary) 14%, var(--lab-card));
+  --d-sel-fg: var(--lab-fg);
+  --d-error: var(--lab-error);
+  --d-ok: var(--lab-ok);
+  --d-off-bg: var(--lab-muted);
+  --d-off-fg: color-mix(in oklab, var(--lab-muted-fg) 70%, transparent);
+  --d-bar: color-mix(in oklab, var(--lab-fg) 22%, transparent);
+  --d-owned: color-mix(in oklab, oklch(0.7 0.08 230) 30%, var(--lab-card));
+  --d-managed: color-mix(in oklab, oklch(0.65 0.14 290) 30%, var(--lab-card));
+  color: var(--lab-fg);
+}
+.lab-page .lab-tab { transition: border-color .25s, box-shadow .3s, transform .25s var(--lab-ease), background-color .25s; }
+.lab-page .lab-tab:hover { transform: translateX(4px); border-color: color-mix(in oklab, var(--lab-primary) 50%, transparent) !important; }
+.lab-page .lab-tab[aria-selected="true"] { border-color: var(--lab-primary) !important; box-shadow: var(--lab-shadow); }
+.lab-page .lab-panel { box-shadow: var(--lab-shadow); }
+
+/* One-line summary under each tab name: in the static HTML for search engines and skimmers. */
+.lab-tab-sum { display: block; margin-top: 4px; font-size: 13px; line-height: 1.45; color: var(--d-muted, var(--muted)); }
+.lab-tab[aria-selected="true"] .lab-tab-sum { color: var(--d-fg-2, var(--ink-2)); }
+/* Real chunk download for the hardware lab: hold the space so nothing jumps. */
+.lab-loading { margin: 0; min-height: 640px; display: grid; place-items: center; font-family: var(--mono); font-size: 13px; color: var(--lab-muted-fg); border: 1px dashed var(--lab-border-strong); border-radius: 16px; }
+
+/* Global .pill / .btn / .eyebrow / form controls, restyled inside the demos only. */
+.lab-page .lab-demos .pill {
+  font-family: var(--lab-ui); font-size: 14px; padding: 10px 16px;
+  background: var(--lab-card); color: var(--lab-fg); border: 1px solid var(--lab-border-strong);
+  transition: border-color .2s, background-color .2s, color .2s;
+}
+.lab-page .lab-demos .pill:hover { border-color: var(--lab-primary); }
+.lab-page .lab-demos .pill[aria-pressed="true"] { background: var(--lab-primary); color: var(--lab-primary-fg); border-color: var(--lab-primary); }
+.lab-page .lab-demos .btn-dark,
+.lab-page .lab-demos .btn-accent { background: var(--lab-primary); border-color: var(--lab-primary); color: var(--lab-primary-fg); }
+.lab-page .lab-demos .btn-dark:hover,
+.lab-page .lab-demos .btn-accent:hover { color: var(--lab-primary-fg); box-shadow: 0 0 28px -6px var(--lab-glow); }
+.lab-page .lab-demos .btn:disabled { opacity: .6; cursor: progress; }
+.lab-page .lab-demos .eyebrow { color: var(--lab-muted-fg); }
+.lab-page .lab-demos input:not([type="checkbox"]),
+.lab-page .lab-demos select { background: var(--lab-card); color: var(--lab-fg); }
+.lab-page .lab-demos input::placeholder { color: var(--lab-muted-fg); }
+.lab-page .lab-demos input[type="checkbox"] { accent-color: var(--lab-primary); width: 18px; height: 18px; }
+
+/* ---------- Coming to the Lab ---------- */
+.coming { border-top: 1px solid var(--lab-border); background: linear-gradient(180deg, color-mix(in oklab, var(--lab-secondary) 5%, transparent), transparent 60%); }
+.coming .lab-lead a { color: var(--lab-primary); }
+.coming-grid { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr)); gap: 20px; }
+.coming-card article {
+  height: 100%; display: flex; flex-direction: column; overflow: hidden; border-radius: 18px;
+  border: 1px dashed var(--lab-border-strong); background: color-mix(in oklab, var(--lab-card) 70%, transparent);
+  transition: transform .35s var(--lab-ease), border-color .3s, box-shadow .35s;
+}
+.coming-card:hover article { transform: translateY(-4px); border-color: color-mix(in oklab, var(--lab-primary) 60%, transparent); box-shadow: var(--lab-shadow); }
+.coming-art { position: relative; border-bottom: 1px solid var(--lab-border); background: var(--lab-bg-2); }
+.coming-art::after { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 80% at 50% 50%, color-mix(in oklab, var(--lab-primary) 10%, transparent), transparent); opacity: 0; transition: opacity .4s; }
+.coming-card:hover .coming-art::after { opacity: 1; }
+.coming-art svg { display: block; width: 100%; height: auto; }
+.coming-art .a-board { fill: none; stroke: var(--lab-border); stroke-dasharray: 3 5; }
+.coming-art .trace { fill: none; stroke: var(--lab-primary); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 5 7; opacity: .55; transition: opacity .3s; }
+.coming-art .trace.t2 { stroke: var(--lab-secondary); }
+.coming-card:hover .trace { opacity: 1; animation: lab-dash .9s linear infinite; }
+.coming-art .a-chip, .coming-art .a-port, .coming-art .a-term { fill: var(--lab-card); stroke: var(--lab-border-strong); }
+.coming-art .a-pcb { fill: color-mix(in oklab, var(--lab-primary) 8%, var(--lab-card)); stroke: var(--lab-border-strong); }
+.coming-art .a-pcb-pi { fill: color-mix(in oklab, var(--lab-ok) 8%, var(--lab-card)); }
+.coming-art .a-pin, .coming-art .a-gpio { fill: var(--lab-muted-fg); }
+.coming-art .a-via { fill: var(--lab-bg-2); stroke: var(--lab-primary); stroke-width: 1.5; }
+.coming-art .a-text { fill: var(--lab-muted-fg); font: 10px var(--mono); }
+.coming-art .a-mono { font-size: 9px; fill: var(--lab-ok); }
+.coming-art .a-wave, .coming-art .a-arc { fill: none; stroke: var(--lab-coral); stroke-width: 1.6; stroke-linecap: round; }
+.coming-art .a-cloud { fill: color-mix(in oklab, var(--lab-secondary) 14%, var(--lab-card)); stroke: var(--lab-secondary); stroke-width: 1.4; }
+.coming-art .a-bar { fill: var(--lab-primary); opacity: .7; }
+.coming-art .a-ring { fill: none; stroke: var(--lab-border-strong); stroke-width: 1.5; stroke-dasharray: 2 4; }
+.coming-art .a-arm { stroke: var(--lab-coral); stroke-width: 4; stroke-linecap: round; }
+.coming-art .a-servo { transform-box: view-box; transform-origin: 244px 58px; transition: transform .8s var(--lab-ease); }
+.coming-card:hover .a-servo { transform: rotate(-70deg); }
+.coming-art .a-led { fill: var(--lab-coral); opacity: .45; transition: opacity .3s; }
+.coming-art .a-led-glow { fill: var(--lab-coral); opacity: 0; transition: opacity .3s; }
+.coming-card:hover .a-led { opacity: 1; }
+.coming-card:hover .a-led-glow { opacity: .25; }
+.coming-card:hover .a-caret { animation: lab-blink 1s steps(1) infinite; }
+.coming-body { flex: 1; display: flex; flex-direction: column; gap: 10px; padding: 18px 20px 20px; }
+.coming-badge {
+  align-self: flex-start; margin: 0; display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px; border-radius: 999px;
+  font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; letter-spacing: .14em;
+  color: var(--lab-coral); border: 1px solid color-mix(in oklab, var(--lab-coral) 45%, transparent); background: color-mix(in oklab, var(--lab-coral) 8%, transparent);
+}
+html[data-lab-theme="light"] .coming-badge { color: oklch(0.5 0.16 38); }
+.coming-badge span { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.coming-title { margin: 0; font-family: var(--lab-display); font-size: 21px; font-weight: 700; letter-spacing: -.02em; color: var(--lab-fg); }
+.coming-summary { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--lab-muted-fg); }
+.coming-topics { margin: 2px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+.coming-topics li { padding: 3px 9px; border-radius: 6px; font-family: var(--mono); font-size: 11px; color: var(--lab-fg-2); background: var(--lab-muted); }
+.coming-slots { margin: auto 0 0; padding: 12px 0 0; list-style: none; display: flex; flex-wrap: wrap; gap: 4px 14px; border-top: 1px solid var(--lab-border); font-family: var(--mono); font-size: 11.5px; }
+.coming-slots .is-pending { color: var(--lab-muted-fg); }
+.coming-slots .is-pending span { opacity: .8; }
+.coming-slots a { color: var(--lab-primary); }
+@media (prefers-reduced-motion: reduce) {
+  .coming-card article, .coming-art .a-servo { transition: none; }
+  .coming-card:hover article { transform: none; }
+  .coming-card:hover .a-servo { transform: none; }
+  .coming-card:hover .trace, .coming-card:hover .a-caret { animation: none; }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 640px) {
+  .lab-bar-brand { display: none; }
+  .lab-bar-inner { gap: 10px; }
+  .orbit-label { display: none; }
+  .orbit-toggle { padding: 4px; }
+  /* Give the demos more width on phones (overrides the inline 24px). */
+  .lab-page .lab-panel-body { padding: 16px !important; }
+  /* Tabs stack above the demo on phones: keep them short. */
+  .lab-tab-sum { display: none; }
+}
