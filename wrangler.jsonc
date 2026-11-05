@@ -1,5 +1,6 @@
 {
-  // Cloudflare Workers with Static Assets
+  // Cloudflare Workers with Static Assets. Static pages are served straight
+  // from ./dist; only /api/* runs the Worker (worker/index.ts).
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "kadslab-site",
   "main": "worker/index.ts",
@@ -12,17 +13,22 @@
       "/api/*"
     ]
   },
-  // Production settings
+  // Production settings (kadslab.com). ALLOWED_ORIGINS is an exact list of
+  // origins whose pages may call /api/ask; nothing else is accepted.
   "vars": {
     "MODEL": "claude-haiku-5-5",
     "ALLOWED_ORIGINS": "https://kadslab.com,https://www.kadslab.com"
   },
-  // Staging preview settings
+  // Staging preview settings (the staging branch's workers.dev preview URL).
+  // Cloudflare adds "X-Robots-Tag: noindex" to preview URLs itself, so
+  // staging stays out of search results; production never gets that header.
   "previews": {
     "vars": {
       "MODEL": "claude-haiku-5-5",
       "ALLOWED_ORIGINS": "https://staging-kadslab-site.dawoodali-1071.workers.dev"
     }
   }
-  // Secret (never committed): ANTHROPIC_API_KEY
+  // Optional secret (never committed): ANTHROPIC_API_KEY. Without it, Digital
+  // Dawood answers from src/data/knowledge.ts at no cost. Before adding it,
+  // create a Cloudflare WAF rate-limiting rule for /api/ask (see worker/index.ts).
 }

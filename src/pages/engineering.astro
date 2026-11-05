@@ -79,11 +79,11 @@ const standards = [
       <div style="flex: 1 1 420px">
         <span class="eyebrow" style="color: var(--orange)">Fig. 04 · Digital Dawood</span>
         <h2 class="h-section" style="margin-top: 14px; color: var(--paper)">Not just a mascot. <span class="accent">A living interface.</span></h2>
-        <p class="lead" style="margin-top: 20px; color: #C9CAD0">The character walking around this site reads what you’re looking at, decides what to do with a small behavior engine, and answers questions about my work with AI that’s only allowed to use real facts.</p>
+        <p class="lead" style="margin-top: 20px; color: #C9CAD0">The character walking around this site reads what you’re looking at, decides what to do with a small behavior engine, and answers questions about my work using only real facts I’ve approved, with AI as an optional extra.</p>
         <a class="btn" href="/engineering/digital-dawood/" style="margin-top: 28px; background: var(--orange); color: var(--ink); border-color: var(--orange)">Explore the technology behind this experience →</a>
       </div>
       <ol class="mono" style="flex: 1 1 360px; margin: 0; padding: 0; list-style: none; font-size: 13px; color: var(--paper)">
-        {['Your activity', 'Context detection', 'Behavior decision', 'State machine', 'Animation', 'AI answer, only when you ask'].map((s, i, a) => (
+        {['Your activity', 'Context detection', 'Behavior decision', 'State machine', 'Animation', 'Grounded answer, only when you ask'].map((s, i, a) => (
           <li>
             <div style={`border: 1px solid ${i === a.length - 1 ? 'var(--orange)' : '#4A4C55'}; padding: 12px 16px; display: flex; gap: 14px`}><span style="color: var(--orange)">{String(i + 1).padStart(2, '0')}</span>{s}</div>
             {i < a.length - 1 && <span aria-hidden="true" style="display: block; height: 16px; margin-left: 22px; border-left: 1.5px solid var(--orange)"></span>}

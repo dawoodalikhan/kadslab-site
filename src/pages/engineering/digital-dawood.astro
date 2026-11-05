@@ -3,10 +3,12 @@ import Base from '../../layouts/Base.astro';
 import CodeTabs from '../../components/CodeTabs';
 import knowledgeSrc from '../../data/knowledge.ts?raw';
 import workerSrc from '../../../worker/index.ts?raw';
+import answerSrc from '../../lib/twin-answer.ts?raw';
 
 const files = [
-  { name: 'worker/index.ts', note: 'The secure endpoint. The API key lives in a Cloudflare secret, requests are origin-checked and rate-limited, and the model only sees facts retrieved from the knowledge base.', code: workerSrc },
-  { name: 'knowledge.ts', note: 'The grounded knowledge base. The same search runs in the Worker and in the browser, so questions still get real answers if the AI is unavailable.', code: knowledgeSrc },
+  { name: 'worker/index.ts', note: 'The secure endpoint. Requests are origin-checked, validated and rate-limited. It answers from the knowledge base; only if an API key is configured as a Cloudflare secret does a model phrase the answer, and it only sees facts retrieved from the knowledge base.', code: workerSrc },
+  { name: 'twin-answer.ts', note: 'Knowledge-based answers with no AI and no cost. Every factual sentence comes verbatim from the knowledge base; it runs in the Worker and, if the Worker can’t be reached, in the browser.', code: answerSrc },
+  { name: 'knowledge.ts', note: 'The grounded knowledge base: every fact Digital Dawood is allowed to state. The same search runs in the Worker and in the browser.', code: knowledgeSrc },
 ];
 
 const pipeline = [
@@ -15,26 +17,26 @@ const pipeline = [
   { n: '03', t: 'Behavior decision', d: 'A weighted picker chooses what to do next: walk to a project card and point at it, type at a code panel, sit and read, grab a coffee.' },
   { n: '04', t: 'State machine', d: 'One activity at a time, each with a minimum duration, so he never flickers between poses or interrupts himself.' },
   { n: '05', t: 'Animation', d: 'An SVG rig with separately animated arms, legs, eyes, brows and mouth. Pure CSS transforms, so it runs on the GPU.' },
-  { n: '06', t: 'AI answer', d: 'Only when you ask a question. Nothing about movement or idling ever calls a model.' },
+  { n: '06', t: 'Answer', d: 'Only when you ask a question. Answers come from approved facts; an AI model phrases them only when one is enabled, and each answer is labeled. Nothing about movement or idling ever calls a server.' },
 ];
 
 const states = ['idle', 'walk', 'jump', 'sit', 'wave', 'point', 'think', 'talk', 'typing', 'read', 'coffee', 'juggle', 'wrench', 'phone', 'stretch', 'sleep', 'surprised'];
 
 const rules = [
   { t: 'No invented facts', d: 'Answers are built only from the knowledge base. If it isn’t there, he says so and points you to the Contact page.' },
-  { t: 'No secrets in the browser', d: 'The AI key is a server-side secret. The browser only ever calls /api/ask on this domain.' },
+  { t: 'No secrets in the browser', d: 'If an AI key is used, it is a server-side secret. The browser only ever calls /api/ask on this domain.' },
   { t: 'No tracking', d: 'No cookies, no visitor profiles. Your question and the page you’re on are sent when you ask; nothing else.' },
   { t: 'Never in the way', d: 'He only perches on the top edges of cards, slides off when they scroll away, and can be paused or hidden at any time.' },
   { t: 'Quiet by default', d: 'No audio. Signals are small dots or a “!” that reveal a message on hover, never a popup.' },
   { t: 'Respects your settings', d: 'With reduced motion on, he stays put and stops animating. On phones he stays in the corner.' },
 ];
 ---
-<Base title="Digital Dawood · How it works" path="/engineering/digital-dawood/" description="How Digital Dawood works: a behavior-driven animated character with a local state machine, context detection and a grounded AI assistant behind a secure Cloudflare Worker.">
+<Base title="Digital Dawood · How it works" path="/engineering/digital-dawood/" description="How Digital Dawood works: a behavior-driven animated character with a local state machine, context detection and a grounded assistant behind a secure Cloudflare Worker, with optional AI.">
   <section class="wrap" style="padding-block: 88px 56px" data-guide="This page is about how I work. Meta, I know." data-guide-kind="thought">
     <a href="/engineering/" class="mono" style="font-size: 13px; color: var(--ink-2)">← Engineering</a>
     <span class="eyebrow" style="display: block; margin-top: 24px">Technical breakdown</span>
     <h1 class="h-display" style="margin-top: 16px">Not just a mascot. <span class="accent">A living interface.</span></h1>
-    <p class="lead" style="margin-top: 24px; max-width: 760px">Digital Dawood is a behavior-driven character. Most of what he does is decided locally, in your browser, for free. AI is reserved for the one thing that needs it: answering your questions about my work, using only facts I’ve written down.</p>
+    <p class="lead" style="margin-top: 24px; max-width: 760px">Digital Dawood is a behavior-driven character. Most of what he does is decided locally, in your browser, for free. Questions about my work are answered only from facts I’ve written down; AI is optional, and when it’s on, its job is just to phrase those facts.</p>
   </section>
 
   <section class="bp-grid rule-top rule-bottom" data-guide="Six steps. Only the last one ever touches a server." data-guide-mood="build">

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 import Avatar, { type Activity } from './Avatar';
-import { search } from '../data/knowledge';
+import { answerFromKnowledge, MAX_QUESTION, type Source } from '../lib/twin-answer';
 
 /* ------------------------------------------------------------------ *
  * Digital Dawood
@@ -9,14 +9,21 @@ import { search } from '../data/knowledge';
  * → ANIMATION → (optional) AI RESPONSE
  *
  * Everything routine (walking, sitting, idling, reacting) is decided
- * locally. Only visitor questions go to /api/ask, which is grounded in
- * src/data/knowledge.ts. Nothing about the visitor is stored or sent
- * except the question and the page/section they are on.
+ * locally. Only visitor questions go to /api/ask, which answers from
+ * src/data/knowledge.ts (and, only if an AI key is configured, lets Claude
+ * phrase the answer). If /api/ask can't be reached, the same knowledge-based
+ * answer is built right here in the browser. Nothing about the visitor is
+ * stored or sent except the question and the page/section they are on.
  * ------------------------------------------------------------------ */
 
 type Note = { text: string; kind: 'thought' | 'statement' };
 type Mode = 'home' | 'travel' | 'perched';
-type Msg = { from: 'me' | 'you'; text: string; show?: { href: string; label: string } | null };
+type Msg = { from: 'me' | 'you'; text: string; show?: { href: string; label: string } | null; source?: Source };
+
+const SOURCE_LABEL: Record<Source, string> = {
+  knowledge: 'From Dawood’s approved notes · not AI',
+  ai: 'AI-phrased · grounded in Dawood’s notes',
+};
 
 const SIZE = 78;                     // rendered width in px
 const H = SIZE * 1.967;              // rendered height
@@ -291,16 +298,17 @@ export default function DigitalTwin() {
     const secLabel = section.current?.dataset.guide || '';
     let reply: Msg;
     try {
-      const res = await fetch('/api/ask', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ q, page: location.pathname, section: secLabel }) });
+      const res = await fetch('/api/ask', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ q: q.slice(0, MAX_QUESTION), page: location.pathname, section: secLabel }), signal: AbortSignal.timeout(15000) });
       if (!res.ok) throw new Error(String(res.status));
-      const data = await res.json() as { answer: string; show: Msg['show'] };
-      reply = { from: 'me', text: data.answer, show: data.show };
+      const data = await res.json() as { answer?: unknown; show?: Msg['show']; source?: unknown };
+      if (typeof data.answer !== 'string' || !data.answer.trim()) throw new Error('empty');
+      const show = data.show && typeof data.show.href === 'string' && data.show.href.startsWith('/') ? data.show : null;
+      reply = { from: 'me', text: data.answer, show, source: data.source === 'ai' ? 'ai' : 'knowledge' };
     } catch {
-      // Offline fallback: answer straight from the knowledge base.
-      const hits = search(q, 1);
-      reply = hits[0]
-        ? { from: 'me', text: hits[0].text, show: hits[0].show ?? null }
-        : { from: 'me', text: 'Good question, but I don’t have a solid answer for that. Dawood can tell you himself on the Contact page.', show: { href: '/contact/', label: 'Contact page' } };
+      // The endpoint is unreachable (offline, local dev, rate-limited):
+      // build the same knowledge-based answer in the browser.
+      const local = answerFromKnowledge(q, location.pathname);
+      reply = { from: 'me', text: local.answer, show: local.show, source: local.source };
     }
     setMsgs((m) => [...m, reply]);
     setBusy(false); act('talk', 2400);
@@ -366,7 +374,7 @@ export default function DigitalTwin() {
       {chat && (
         <section className="twin-chat" aria-label="Chat with Digital Dawood">
           <header>
-            <div><strong>Digital Dawood</strong><span>Grounded in Dawood’s real work · AI when available</span></div>
+            <div><strong>Digital Dawood</strong><span>Answers from Dawood’s approved notes · AI only when enabled</span></div>
             <button type="button" onClick={() => setChat(false)} aria-label="Close chat">×</button>
           </header>
           <div ref={log} className="twin-log" aria-live="polite">
@@ -374,6 +382,7 @@ export default function DigitalTwin() {
               <div key={i} className={`twin-msg ${m.from}`}>
                 <p>{m.text}</p>
                 {m.show && <a href={m.show.href}>Show me: {m.show.label} →</a>}
+                {m.source && <small className="twin-src">{SOURCE_LABEL[m.source]}</small>}
               </div>
             ))}
             {busy && <div className="twin-msg me typing"><i /><i /><i /></div>}
@@ -381,7 +390,7 @@ export default function DigitalTwin() {
           <div className="twin-sugg">{suggestions.map((s) => <button key={s} type="button" onClick={() => ask(s)}>{s}</button>)}</div>
           <form onSubmit={(e: FormEvent<HTMLFormElement>) => { e.preventDefault(); const f = e.currentTarget; const v = (f.elements.namedItem('q') as HTMLInputElement).value; f.reset(); void ask(v); }}>
             <label className="sr-only" htmlFor="twin-q">Ask Digital Dawood</label>
-            <input id="twin-q" name="q" maxLength={500} placeholder="Ask about my work, stack, or this site…" autoComplete="off" />
+            <input id="twin-q" name="q" maxLength={MAX_QUESTION} placeholder="Ask about my work, stack, or this site…" autoComplete="off" />
             <button type="submit" disabled={busy}>Send</button>
           </form>
           <footer>
