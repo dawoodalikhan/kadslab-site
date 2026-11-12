@@ -36,7 +36,6 @@ export interface AdsEnv {
   SITE_URL?: string;
   ADS_FREE_LIMIT?: string;
   ADS_MONTHLY_QUOTA?: string;
-  MAGIC_LINK_DEBUG?: string; // "1" on staging only: returns the sign-in link instead of emailing it
   MOCK_AI?: string;          // "1" for local tests only: no paid calls
 }
 
@@ -294,6 +293,7 @@ const EMAIL_RE = /^[^\s@]{1,64}@[^\s@]{1,190}\.[^\s@]{2,24}$/;
 const loginLimiter = createRateLimiter({ windowMs: 10 * 60_000, maxHits: 5, maxKeys: 5_000 });
 
 async function login(req: Request, env: AdsEnv): Promise<Response> {
+  if (!env.RESEND_API_KEY || !env.MAIL_FROM) return json({ error: 'email-not-configured' }, 503);
   const body = await readJson(req);
   const email = typeof body?.email === 'string' ? body.email.trim().toLowerCase() : '';
   if (!EMAIL_RE.test(email)) return json({ error: 'bad-email' }, 400);
@@ -306,8 +306,6 @@ async function login(req: Request, env: AdsEnv): Promise<Response> {
   const base = (env.SITE_URL || new URL(req.url).origin).replace(/\/$/, '');
   const link = `${base}/tools/ad-generator/?token=${token}${next ? `&next=${next}` : ''}`;
 
-  if (env.MAGIC_LINK_DEBUG === '1') return json({ sent: true, debugLink: link });
-  if (!env.RESEND_API_KEY || !env.MAIL_FROM) return json({ error: 'email-not-configured' }, 503);
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json' },

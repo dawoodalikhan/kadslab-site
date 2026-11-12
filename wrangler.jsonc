@@ -46,10 +46,7 @@
       "ADS_FREE_LIMIT": "2",
       "ADS_MONTHLY_QUOTA": "100",
       "STRIPE_PRICE_ID": "",
-      "MAIL_FROM": "KADS Lab <hello@kadslab.com>",
-      // Staging only: the sign-in link is shown on screen instead of emailed,
-      // so the flow can be tested without an email provider. Never in production.
-      "MAGIC_LINK_DEBUG": "1"
+      "MAIL_FROM": "KADS Lab <hello@kadslab.com>"
     },
     // Bindings aren't inherited by previews, so they're repeated here.
     "ai": { "binding": "AI" },
