@@ -32,7 +32,7 @@
   // once (Storage & databases → D1 → Create → "kadslab-ads") and paste its ID
   // here. Tables are created automatically on first request.
   "d1_databases": [
-    { "binding": "DB", "database_name": "kadslab-ads", "database_id": "REPLACE_WITH_D1_DATABASE_ID" }
+    { "binding": "DB", "database_name": "kadslab-ads", "database_id": "e980527f-0ab7-469c-8264-68301ae1ee2b" }
   ],
   // Staging preview settings (the staging branch's workers.dev preview URL).
   // Cloudflare adds "X-Robots-Tag: noindex" to preview URLs itself, so
