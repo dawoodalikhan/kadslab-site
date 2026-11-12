@@ -17,18 +17,45 @@
   // origins whose pages may call /api/ask; nothing else is accepted.
   "vars": {
     "MODEL": "claude-haiku-5-5",
-    "ALLOWED_ORIGINS": "https://kadslab.com,https://www.kadslab.com"
+    "ALLOWED_ORIGINS": "https://kadslab.com,https://www.kadslab.com",
+    // Ad generator (worker/ads.ts)
+    "SITE_URL": "https://kadslab.com",
+    "AD_MODEL": "claude-haiku-5-5",
+    "ADS_FREE_LIMIT": "2",
+    "ADS_MONTHLY_QUOTA": "100",
+    "STRIPE_PRICE_ID": "",
+    "MAIL_FROM": "KADS Lab <hello@kadslab.com>"
   },
+  // Workers AI paints the ad images (FLUX schnell). No setup needed.
+  "ai": { "binding": "AI" },
+  // Accounts, sign-in links and usage counts for the ad generator. Create it
+  // once (Storage & databases → D1 → Create → "kadslab-ads") and paste its ID
+  // here. Tables are created automatically on first request.
+  "d1_databases": [
+    { "binding": "DB", "database_name": "kadslab-ads", "database_id": "REPLACE_WITH_D1_DATABASE_ID" }
+  ],
   // Staging preview settings (the staging branch's workers.dev preview URL).
   // Cloudflare adds "X-Robots-Tag: noindex" to preview URLs itself, so
   // staging stays out of search results; production never gets that header.
   "previews": {
     "vars": {
       "MODEL": "claude-haiku-5-5",
-      "ALLOWED_ORIGINS": "https://staging-kadslab-site.dawoodali-1071.workers.dev"
+      "ALLOWED_ORIGINS": "https://staging-kadslab-site.dawoodali-1071.workers.dev",
+      "SITE_URL": "https://staging-kadslab-site.dawoodali-1071.workers.dev",
+      "AD_MODEL": "claude-haiku-5-5",
+      "ADS_FREE_LIMIT": "2",
+      "ADS_MONTHLY_QUOTA": "100",
+      "STRIPE_PRICE_ID": "",
+      "MAIL_FROM": "KADS Lab <hello@kadslab.com>",
+      // Staging only: the sign-in link is shown on screen instead of emailed,
+      // so the flow can be tested without an email provider. Never in production.
+      "MAGIC_LINK_DEBUG": "1"
     }
   }
-  // Optional secret (never committed): ANTHROPIC_API_KEY. Without it, Digital
+  // Secrets (never committed; Settings → Variables and secrets):
+  //   ANTHROPIC_API_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
+  //   RESEND_API_KEY, TURNSTILE_SECRET (optional).
+  // ANTHROPIC_API_KEY: Without it, Digital
   // Dawood answers from src/data/knowledge.ts at no cost. Before adding it,
   // create a Cloudflare WAF rate-limiting rule for /api/ask (see worker/index.ts).
 }

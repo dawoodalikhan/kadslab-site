@@ -1,0 +1,16 @@
+---
+import Base from '../../layouts/Base.astro';
+import AdGenerator from '../../components/AdGenerator';
+import { AD_TOOL } from '../../data/tools';
+import '../../styles/ad-generator.css';
+---
+<Base title={AD_TOOL.name} path="/tools/ad-generator/" description={`Describe your business and get a ready-to-post ad: copy, an AI image and a finished creative for feed, story or link placements. ${AD_TOOL.freeAds} free ads, no sign-up.`} bodyClass="tools-page">
+  <section class="wrap adg-hero" data-guide="This one's a real product. Try two ads free, no sign-up." data-guide-mood="build">
+    <span class="eyebrow">§ Tools / 01 · {AD_TOOL.name}</span>
+    <h1 class="h-display" style="margin-top: 16px">Describe it. <span class="accent">Get the ad.</span></h1>
+    <p class="lead" style="margin-top: 20px">One brief in, one finished ad out: feed copy, an AI-made image and a creative sized for the placement. Your first {AD_TOOL.freeAds} are free, no account needed.</p>
+  </section>
+  <section class="wrap" style="padding-bottom: 104px">
+    <AdGenerator client:load />
+  </section>
+</Base>

@@ -24,8 +24,9 @@
 import { FACTS, search } from '../src/data/knowledge';
 import { answerFromKnowledge, MAX_QUESTION, type Answer } from '../src/lib/twin-answer';
 import { createRateLimiter } from './rate-limit';
+import { handleAds, type AdsEnv } from './ads';
 
-interface Env {
+interface Env extends AdsEnv {
   ASSETS: { fetch: (req: Request) => Promise<Response> };
   ANTHROPIC_API_KEY?: string;
   MODEL?: string;
@@ -178,6 +179,13 @@ export default {
         return await ask(req, env);
       } catch {
         return json({ error: 'server-error' }, 500); // fail closed, without details
+      }
+    }
+    if (url.pathname.startsWith('/api/ads/') || url.pathname === '/api/stripe/webhook') {
+      try {
+        return await handleAds(req, env, url.pathname, allowedOrigins(env));
+      } catch {
+        return json({ error: 'server-error' }, 500);
       }
     }
     if (url.pathname.startsWith('/api/')) return json({ error: 'not-found' }, 404);
