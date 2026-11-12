@@ -201,15 +201,31 @@ async function writeAd(brief: string, tone: string, format: Format, env: AdsEnv)
     headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
     body: JSON.stringify({
       model: env.AD_MODEL || 'claude-haiku-5-5',
-      max_tokens: 700,
+      max_tokens: 1400,
+      thinking: { type: 'disabled' },
       system: SYSTEM,
       messages: [{ role: 'user', content: `Format: ${FORMATS[format]}\nTone: ${tone}\n\nAdvertiser brief:\n"""${brief}"""` }],
     }),
   });
-  if (!res.ok) throw new Error(`anthropic ${res.status}`);
-  const data = (await res.json()) as { content?: { type: string; text?: string }[] };
+  if (!res.ok) {
+    console.warn('Ad copy request failed', { status: res.status });
+    throw new Error('copy-request-failed');
+  }
+  const data = (await res.json()) as { stop_reason?: string; content?: { type: string; text?: string }[] };
+  if (data.stop_reason === 'max_tokens') {
+    console.warn('Ad copy reached the output limit');
+    throw new Error('copy-output-limit');
+  }
   const raw = data.content?.find((c) => c.type === 'text')?.text || '';
-  const p = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1)) as Record<string, any>;
+  let p: Record<string, any>;
+  try {
+    const parsed: unknown = JSON.parse(raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1));
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) throw new Error('invalid copy');
+    p = parsed as Record<string, any>;
+  } catch {
+    console.warn('Ad copy returned invalid JSON');
+    throw new Error('invalid-copy');
+  }
   if (typeof p.refused === 'string') return { refused: clip(p.refused, 160) };
   const ad = {
     brand: clip(p.brand, 24),
