@@ -61,7 +61,7 @@ Code: `worker/ads.ts` (API), `worker/stripe.ts`, `src/components/AdGenerator.tsx
    - `ANTHROPIC_API_KEY` (also powers Digital Dawood)
    - `STRIPE_SECRET_KEY`: use the `sk_test_…` key on staging first
    - `STRIPE_WEBHOOK_SECRET`: from the webhook in step 3
-   - `RESEND_API_KEY`: production sign-in emails (staging shows the link on screen instead)
+   - `RESEND_API_KEY`: sign-in emails on staging and production
    - `TURNSTILE_SECRET` (optional bot check; also set `PUBLIC_TURNSTILE_SITE_KEY` as a build variable)
 3. **Stripe**: create a Product "KADS Ad Generator Pro" with a recurring monthly price,
    put the `price_…` ID in `STRIPE_PRICE_ID` in `wrangler.jsonc` (both blocks), and add a

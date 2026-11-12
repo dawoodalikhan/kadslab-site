@@ -60,7 +60,6 @@ export default function AdGenerator() {
   const [ads, setAds] = useState<Made[]>([]);
   const [email, setEmail] = useState('');
   const [mail, setMail] = useState<'idle' | 'sending' | 'sent'>('idle');
-  const [debugLink, setDebugLink] = useState('');
   const tsBox = useRef<HTMLDivElement>(null);
   const tsToken = useRef('');
   const tsId = useRef<string | undefined>(undefined);
@@ -148,8 +147,8 @@ export default function AdGenerator() {
   const sendLink = async (e: FormEvent) => {
     e.preventDefault();
     setError(''); setMail('sending');
-    const r = await api<{ sent: boolean; debugLink?: string }>('/api/ads/login', { email, next: 'checkout' });
-    if (r.ok) { setMail('sent'); setDebugLink(r.data.debugLink || ''); }
+    const r = await api<{ sent: boolean }>('/api/ads/login', { email, next: 'checkout' });
+    if (r.ok) setMail('sent');
     else { setMail('idle'); setError(say(r.data.error)); }
   };
 
@@ -239,7 +238,6 @@ export default function AdGenerator() {
               : mail === 'sent' ? (
                 <div className="adg-sent" role="status">
                   <p>Check <b>{email}</b> for a sign-in link. It takes you straight to checkout.</p>
-                  {debugLink && <p className="mono adg-debug">Staging only: <a href={debugLink}>open sign-in link</a></p>}
                 </div>
               ) : (
                 <form className="adg-signup" onSubmit={sendLink}>
