@@ -135,7 +135,12 @@ export default function AdGenerator() {
         const png = await renderAd(r.data.ad);
         setAds((list) => [{ ...r.data.ad, id: Date.now(), png }, ...list]);
       } else if (r.data.error === 'refused') setError(`Can't make this one: ${r.data.reason}`);
-      else if (r.data.error !== 'free-limit-reached') setError(say(r.data.error));
+      else if (r.data.error !== 'free-limit-reached') {
+        const previous = ads.length && r.data.error === 'generation-failed'
+          ? ' The preview still shows your previous ad.'
+          : '';
+        setError(say(r.data.error) + previous);
+      }
     } catch { setError(say()); }
     finally {
       setBusy(false);
