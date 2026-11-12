@@ -73,6 +73,7 @@ export default function DigitalTwin() {
   const [note, setNote] = useState<Note | null>(null);
   const [unread, setUnread] = useState(false);
   const [bubble, setBubble] = useState(false);
+  const [path, setPath] = useState('/');
   const [chat, setChat] = useState(false);
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [busy, setBusy] = useState(false);
@@ -161,7 +162,6 @@ export default function DigitalTwin() {
 
   /* ---------- context: sections with notes ---------- */
   useEffect(() => {
-    const els = Array.from(document.querySelectorAll<HTMLElement>('[data-guide]'));
     const io = new IntersectionObserver((entries) => {
       for (const e of entries) {
         if (!e.isIntersecting || e.target === section.current) continue;
@@ -172,9 +172,23 @@ export default function DigitalTwin() {
         setBubble(false);
       }
     }, { rootMargin: '-45% 0px -45% 0px' });
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
+    const observePage = () => {
+      io.disconnect();
+      section.current = null;
+      setPath(location.pathname);
+      setNote(null);
+      setUnread(false);
+      setBubble(false);
+      if (perch.current && !perch.current.isConnected) travel(homeSpot(), null);
+      document.querySelectorAll<HTMLElement>('[data-guide]').forEach((el) => io.observe(el));
+    };
+    observePage();
+    document.addEventListener('astro:after-swap', observePage);
+    return () => {
+      io.disconnect();
+      document.removeEventListener('astro:after-swap', observePage);
+    };
+  }, [homeSpot, travel]);
 
   /* ---------- keep perched position glued to its element ---------- */
   useEffect(() => {
@@ -315,7 +329,7 @@ export default function DigitalTwin() {
   };
 
   const suggestions = (() => {
-    const p = typeof location !== 'undefined' ? location.pathname : '/';
+    const p = path;
     if (p.startsWith('/work')) return ['What was your role on these?', 'Why no client names?', 'How did you integrate the CRM?'];
     if (p.startsWith('/lab')) return ['How does the lead routing work?', 'What does the hardware lab simulate?', 'What stack is the Lab built with?'];
     if (p.startsWith('/engineering')) return ['How do you work?', 'Tell me about the motor project', 'How does Digital Dawood work?'];
@@ -381,7 +395,7 @@ export default function DigitalTwin() {
             {msgs.map((m, i) => (
               <div key={i} className={`twin-msg ${m.from}`}>
                 <p>{m.text}</p>
-                {m.show && <a href={m.show.href}>Show me: {m.show.label} →</a>}
+                {m.show && <a href={path === '/lab/' && m.show.href.startsWith('/lab/#') ? m.show.href.slice(5) : m.show.href} data-astro-reload={path === '/lab/' && m.show.href.startsWith('/lab/#') ? true : undefined}>Show me: {m.show.label} →</a>}
                 {m.source && <small className="twin-src">{SOURCE_LABEL[m.source]}</small>}
               </div>
             ))}
