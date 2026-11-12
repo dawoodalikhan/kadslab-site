@@ -50,7 +50,12 @@
       // Staging only: the sign-in link is shown on screen instead of emailed,
       // so the flow can be tested without an email provider. Never in production.
       "MAGIC_LINK_DEBUG": "1"
-    }
+    },
+    // Bindings aren't inherited by previews, so they're repeated here.
+    "ai": { "binding": "AI" },
+    "d1_databases": [
+      { "binding": "DB", "database_name": "kadslab-ads", "database_id": "e980527f-0ab7-469c-8264-68301ae1ee2b" }
+    ]
   }
   // Secrets (never committed; Settings → Variables and secrets):
   //   ANTHROPIC_API_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET,
