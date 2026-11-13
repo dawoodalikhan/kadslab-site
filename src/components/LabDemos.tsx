@@ -19,9 +19,13 @@ export default function LabDemos() {
     const sync = () => { const h = location.hash.slice(1); if (isDemo(h)) setDemo(h); };
     sync();
     addEventListener('hashchange', sync);
-    return () => removeEventListener('hashchange', sync);
+    document.addEventListener('astro:page-load', sync);
+    return () => {
+      removeEventListener('hashchange', sync);
+      document.removeEventListener('astro:page-load', sync);
+    };
   }, []);
-  const pick = (id: DemoId) => { setDemo(id); history.replaceState(null, '', `#${id}`); };
+  const pick = (id: DemoId) => { setDemo(id); history.replaceState(history.state, '', `#${id}`); };
   const cur = DEMOS.find((d) => d.id === demo)!;
   // Arrow keys move between tabs, as the WAI-ARIA tabs pattern expects.
   const onKey = (e: React.KeyboardEvent, i: number) => {

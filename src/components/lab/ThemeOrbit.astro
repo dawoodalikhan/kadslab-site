@@ -50,16 +50,25 @@
     root.style.setProperty('--vt-x', `${x}px`);
     root.style.setProperty('--vt-y', `${y}px`);
     root.style.setProperty('--vt-r', `${Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))}px`);
-    document.startViewTransition(() => paint(t));
+    root.classList.add('lab-theme-changing');
+    void document.startViewTransition(() => paint(t)).finished.finally(() => {
+      root.classList.remove('lab-theme-changing');
+    });
   }
 
-  document.querySelectorAll<HTMLButtonElement>('[data-orbit-toggle]').forEach((b) =>
-    b.addEventListener('click', () => {
-      const next: Theme = current() === 'dark' ? 'light' : 'dark';
-      try { localStorage.setItem(KEY, next); } catch {}
-      apply(next, b);
-    }),
-  );
+  document.addEventListener('astro:page-load', () => {
+    if (!document.body.classList.contains('lab-page')) return;
+    let theme = current();
+    try { theme = localStorage.getItem(KEY) === 'light' ? 'light' : 'dark'; } catch {}
+    paint(theme);
+  });
 
-  paint(current());
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return;
+    const button = event.target.closest<HTMLElement>('[data-orbit-toggle]');
+    if (!button) return;
+    const next = current() === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem(KEY, next); } catch {}
+    apply(next, button);
+  });
 </script>

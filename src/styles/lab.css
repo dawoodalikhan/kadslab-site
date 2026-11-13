@@ -146,8 +146,8 @@ html[data-lab-theme="light"] .orbit-moon { transform: rotate(220deg); }
 html[data-lab-theme="light"] .orbit-toggle:hover .orbit-moon { transform: rotate(250deg); }
 
 /* Circular reveal when switching theme (View Transitions API). */
-::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
-::view-transition-new(root) { animation: lab-reveal .65s var(--lab-ease, ease); }
+.lab-theme-changing::view-transition-old(root), .lab-theme-changing::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+.lab-theme-changing::view-transition-new(root) { animation: lab-reveal .65s var(--lab-ease, ease); }
 @keyframes lab-reveal {
   from { clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 0)); }
   to { clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 50%) var(--vt-y, 0)); }
